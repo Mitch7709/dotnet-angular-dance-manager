@@ -8,7 +8,7 @@ public record RegisterStudentRequest(
     string LastName,
     string Email,
     string PhoneNumber,
-    DateOnly? DateOfBirth,
+    string DateOfBirth,
     string? ImageUrl,
     string Password
     );

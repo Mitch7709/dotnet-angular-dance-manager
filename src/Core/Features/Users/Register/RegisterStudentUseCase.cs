@@ -18,11 +18,6 @@ public class RegisterStudentUseCase(
             return Result.Failure(ErrorType.ValidationError, "User already exists with this email.");
         }
 
-        if (request.DateOfBirth is null)
-        {
-            return Result.Failure(ErrorType.ValidationError, "Date of birth is required for students.");
-        }
-
         var user = new AppUser
         (
             request.Email,
@@ -37,7 +32,9 @@ public class RegisterStudentUseCase(
             return Result.Failure(result.ErrorType.Value, result.ErrorMessage);
         }
 
-        var studentRequest = new CreateStudentRequest(user.Id, request.DateOfBirth, request.ImageUrl);
+        var dateOfBirth = DateOnly.ParseExact(request.DateOfBirth, "yyyy-MM-dd", null);
+
+        var studentRequest = new CreateStudentRequest(user.Id, dateOfBirth, request.ImageUrl);
         await createStudentUseCase.ExecuteAsync(studentRequest);
 
         var token = await tokenService.GenerateToken(user);

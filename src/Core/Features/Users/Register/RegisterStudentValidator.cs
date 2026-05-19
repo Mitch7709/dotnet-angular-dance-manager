@@ -27,6 +27,12 @@ public class RegisterStudentValidator : AbstractValidator<RegisterStudentRequest
             .Matches(@"^\d{3}-?\d{3}-?\d{4}$");
 
         RuleFor(x => x.DateOfBirth)
-            .NotEmpty();
+            .NotEmpty().WithMessage("Date of birth is required for students.")
+            .Must(BeAValidDate).WithMessage("Date of birth must be a valid date in the format YYYY-MM-DD.");
+    }
+
+    private bool BeAValidDate(string date)
+    {
+        return DateTime.TryParseExact(date, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out _);
     }
 }
