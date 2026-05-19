@@ -27,4 +27,8 @@ export class TextInput implements ControlValueAccessor {
   get control(): FormControl {
     return this.ngControl.control as FormControl;
   }
+
+  get serverError(): string | null {
+    return this.control?.errors?.['server'] || null;
+  }
 }

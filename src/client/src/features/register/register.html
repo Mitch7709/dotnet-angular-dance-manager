@@ -15,7 +15,7 @@
         >
           Create an account
         </h1>
-        <form [formGroup]="credentialsForm" class="space-y-4 md:space-y-6" action="#">
+        <form [formGroup]="credentialsForm" class="space-y-4 md:space-y-6" (ngSubmit)="register()">
           <div>
             <app-text-input
               [label]="'First Name'"
@@ -45,7 +45,7 @@
               [label]="'Phone Number'"
               [placeholder]="'Phone Number'"
               [required]="true"
-              formControlName="phone"
+              formControlName="phoneNumber"
             />
           </div>
           <div class="flex flex-row gap-4">
@@ -77,17 +77,18 @@
               >
             </div>
           </div>
-          @if (role === 'Student') {
+          <div *ngIf="role === 'Student'">
             <div>
               <app-text-input
                 [label]="'Date of Birth'"
                 [type]="'date'"
                 [placeholder]="'Date of Birth'"
                 [required]="true"
-                formControlName="dob"
+                formControlName="dateOfBirth"
               />
             </div>
-          } @else if (role === 'Instructor') {
+          </div>
+          <div *ngIf="role === 'Instructor'">
             <div>
               <app-text-input
                 [label]="'Bio'"
@@ -97,7 +98,7 @@
                 formControlName="bio"
               />
             </div>
-          }
+          </div>
 
           <div>
             <app-text-input
@@ -110,7 +111,7 @@
           </div>
 
           <div class="flex items-center">
-            <button type="submit" (click)="register()" class="btn btn-primary justify-center">Create an account</button>
+            <button type="submit" class="btn btn-primary justify-center">Create an account</button>
           </div>
         </form>
       </div>
