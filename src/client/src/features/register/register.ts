@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { UserService } from '../../core/services/user-service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -9,7 +8,7 @@ import { take } from 'rxjs/internal/operators/take';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, TextInput, ReactiveFormsModule],
+  imports: [TextInput, ReactiveFormsModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -34,13 +33,13 @@ export class Register {
   onRoleChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.role = target.value as 'Student' | 'Instructor';
-    // console.log('Selected role:', this.role);
+
+    this.clearServerError('dateOfBirth');
+    this.clearServerError('bio');
   }
 
   register() {
     const formData = this.credentialsForm.value;
-    // console.log('Form Data:', formData);
-    console.log('Selected role:', this.role);
 
     if (this.role === 'Student') {
       const studentCreds = {
@@ -63,7 +62,7 @@ export class Register {
 
             this.displayValidationErrors(validationErrors);
           } else {
-            console.error('Login failed:', error);
+            console.error('Student registration failed:', error);
           }
         },
       });
@@ -95,7 +94,8 @@ export class Register {
     }
   }
 
-  displayValidationErrors(errors: Record<string, string[]>) {
+  private displayValidationErrors(errors: Record<string, string[]>) {
+    console.log('Validation errors:', errors);
     const toCamel = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
     Object.entries(errors).forEach(([field, messages]) => {
       const control = this.credentialsForm.get(toCamel(field));
@@ -104,5 +104,12 @@ export class Register {
       // auto-clear on edit:
       control?.valueChanges.pipe(take(1)).subscribe(() => control.setErrors(null));
     });
+  }
+
+  private clearServerError(field: string) {
+    const control = this.credentialsForm.get(field);
+    if (control) {
+      control.setErrors(null);
+    }
   }
 }

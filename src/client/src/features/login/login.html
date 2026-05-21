@@ -15,7 +15,7 @@
         >
           Login to your account
         </h1>
-        <form [formGroup]="credentialsForm" class="space-y-4 md:space-y-6" action="#">
+        <form [formGroup]="credentialsForm" class="space-y-4 md:space-y-6" (ngSubmit)="login()">
           <div>
             <app-text-input
               [label]="'Email'"
@@ -35,7 +35,7 @@
           </div>
 
           <div class="flex items-end">
-            <button type="submit" (click)="login()" class="btn btn-primary justify-center">
+            <button type="submit" class="btn btn-primary justify-center">
               Login
             </button>
           </div>

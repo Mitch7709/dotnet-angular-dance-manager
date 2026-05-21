@@ -77,7 +77,7 @@
               >
             </div>
           </div>
-          <div *ngIf="role === 'Student'">
+          @if (role === 'Student') {
             <div>
               <app-text-input
                 [label]="'Date of Birth'"
@@ -87,9 +87,9 @@
                 formControlName="dateOfBirth"
               />
             </div>
-          </div>
-          <div *ngIf="role === 'Instructor'">
-            <div>
+          }
+          @else if (role === 'Instructor') {
+             <div>
               <app-text-input
                 [label]="'Bio'"
                 [type]="'textarea'"
@@ -98,8 +98,7 @@
                 formControlName="bio"
               />
             </div>
-          </div>
-
+          }
           <div>
             <app-text-input
               [label]="'Password'"
