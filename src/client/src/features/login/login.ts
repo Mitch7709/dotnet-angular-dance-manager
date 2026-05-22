@@ -47,7 +47,7 @@ export class Login {
             control?.valueChanges.pipe(take(1)).subscribe(() => control.setErrors(null));
           });
         } else {
-          console.error('Login failed:', error);
+          console.error('Login failed:', error.error.error);
         }
       },
     });
