@@ -18,7 +18,6 @@ export type UpdateStudentRequest = {
 };
 
 export type UpdateStudentResponse = {
-  id: number;
   firstName: string;
   lastName: string;
   phoneNumber: string;
