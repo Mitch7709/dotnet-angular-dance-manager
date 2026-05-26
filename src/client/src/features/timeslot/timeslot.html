@@ -8,6 +8,7 @@
           <th>Duration (min)</th>
           <th>Day</th>
           <th>Active</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -18,9 +19,63 @@
             <td>{{ slot.durationInMinutes }}</td>
             <td>{{ slot.dayOfWeek }}</td>
             <td>{{ slot.isActive ? 'Yes' : 'No' }}</td>
+            <td>
+              <button class="btn btn-sm btn-primary" (click)="openEditDialog(slot)">Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteTimeSlot(slot.id)">
+                Delete
+              </button>
+            </td>
           </tr>
         }
       </tbody>
     </table>
   </div>
 </div>
+
+<dialog id="timeslot-dialog" class="modal">
+  <form class="modal-box" (ngSubmit)="saveEdit()">
+    <h3 class="font-bold text-lg">Edit Time Slot</h3>
+    
+    @if (selectedTimeSlot(); as selected) {
+    <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="label">
+              <span class="label-text">Start Time</span>
+            </label>
+            <input type="time" class="input input-bordered" name="startTime" [(ngModel)]="selected.startTime" required />
+          </div>
+          <div>
+            <label class="label">
+              <span class="label-text">Duration (minutes)</span>
+            </label>
+            <input type="number" class="input input-bordered" name="durationInMinutes" [(ngModel)]="selected.durationInMinutes" required />
+          </div>          
+          <div>
+            <span class="label-text">Day of Week</span>
+            <select class="select select-bordered w-full" name="dayOfWeek" [(ngModel)]="selected.dayOfWeek" required>
+              <option value="" disabled selected>Select a day</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+          </div>
+          <div>
+            <span class="label-text">Active</span>
+            <select class="select select-bordered w-full" name="isActive" [(ngModel)]="selected.isActive" required>
+              <option value="" disabled selected>Select status</option>
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+        </div>
+    }
+    <div class="modal-action">
+      <button class="btn" type="button" (click)="closeDialog()">Close</button>
+      <button class="btn btn-primary" type="submit">Save</button>
+    </div>
+  </form>
+</dialog>
