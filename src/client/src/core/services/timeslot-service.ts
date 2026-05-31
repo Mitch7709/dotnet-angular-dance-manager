@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { CreateTimeSlotRequest, TimeSlotResponse, UpdateTimeSlotRequest } from '../../types/DTOs/TimeSlotDTOs';
+import { TimeSlotRequest, TimeSlotResponse } from '../../types/DTOs/TimeSlotDTOs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,10 +16,10 @@ export class TimeslotService {
   getById(id: number) {
     return this.http.get<TimeSlotResponse>(`${this.baseUrl}/${id}`);
   }
-  create(body: CreateTimeSlotRequest) {
+  create(body: TimeSlotRequest) {
     return this.http.post<TimeSlotResponse>(this.baseUrl, body);
   }
-  update(id: number, body: UpdateTimeSlotRequest) {
+  update(id: number, body: TimeSlotRequest) {
     return this.http.put(`${this.baseUrl}/${id}`, body);
   }
   delete(id: number) {

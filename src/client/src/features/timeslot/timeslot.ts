@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { TimeslotService } from '../../core/services/timeslot-service';
-import { TimeSlotResponse } from '../../types/DTOs/TimeSlotDTOs';
+import { TimeSlotRequest, TimeSlotResponse } from '../../types/DTOs/TimeSlotDTOs';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../core/services/toast-service';
 
 @Component({
   selector: 'app-timeslot',
@@ -11,9 +12,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class Timeslot {
   private timeslotService = inject(TimeslotService);
+  private toastService = inject(ToastService);
 
   timeSlots = signal<TimeSlotResponse[] | null>(null);
-  selectedTimeSlot = signal<TimeSlotResponse | null>(null);
+  selectedTimeSlot = signal<TimeSlotRequest | null>(null);
+  originalTimeSlot = signal<TimeSlotResponse | null>(null);
+
+  protected isCreating = signal(false);
 
   ngOnInit() {
     this.loadTimeSlots();
@@ -26,8 +31,86 @@ export class Timeslot {
     });
   }
 
+  openNewDialog() {
+    this.isCreating.set(true);
+    this.selectedTimeSlot.set({
+      startTime: '',
+      durationInMinutes: 0,
+      dayOfWeek: 'Monday',
+      isActive: true,
+    });
+    this.openDialog();
+  }
+
+  saveNew() {
+    const newSlot = this.selectedTimeSlot();
+    if (!newSlot) return;
+
+    this.timeslotService.create(newSlot).subscribe({
+      next: () => {
+        this.loadTimeSlots();
+        this.closeDialog();
+        this.toastService.success('Time slot created successfully!');
+      },
+      error: (error) => {
+        // console.error('Failed to create time slot:', error);
+        this.toastService.error(error.error);
+      },
+    });
+  }
+
   openEditDialog(slot: TimeSlotResponse) {
-    this.selectedTimeSlot.set({ ...slot})
+    this.isCreating.set(false);
+    this.originalTimeSlot.set(slot);
+    this.selectedTimeSlot.set({ ...slot });
+    this.openDialog();
+  }
+
+  saveEdit() {
+    const slot = this.selectedTimeSlot();
+    const original = this.originalTimeSlot();
+    if (!slot || !original) return;
+
+    const hasChanges =
+      slot.startTime !== original.startTime ||
+      slot.durationInMinutes !== original.durationInMinutes ||
+      slot.dayOfWeek !== original.dayOfWeek ||
+      slot.isActive !== original.isActive;
+
+    if (!hasChanges) {
+      this.closeDialog();
+      return;
+    }
+
+    this.timeslotService.update(original.id, slot).subscribe({
+      next: () => {
+        this.loadTimeSlots();
+        this.closeDialog();
+        this.toastService.success('Time slot updated successfully!');
+      },
+      error: (error) => {
+        // console.error('Failed to update time slot:', error);
+        this.toastService.error(error.error);
+      },
+    });
+  }
+
+  deleteTimeSlot(id: number) {
+    if (confirm('Are you sure you want to delete this time slot?')) {
+      this.timeslotService.delete(id).subscribe({
+        next: () => {
+          this.loadTimeSlots();
+          this.toastService.success('Time slot deleted successfully!');
+        },
+        error: (error) => {
+          // console.error('Failed to delete time slot:', error.error);
+          this.toastService.error(error.error);
+        },
+      });
+    }
+  }
+
+  openDialog() {
     const dialog = document.getElementById('timeslot-dialog') as HTMLDialogElement;
     dialog?.showModal();
   }
@@ -36,28 +119,6 @@ export class Timeslot {
     const dialog = document.getElementById('timeslot-dialog') as HTMLDialogElement;
     dialog?.close();
     this.selectedTimeSlot.set(null);
-  }
-
-  saveEdit() {
-    const slot = this.selectedTimeSlot();
-    if (!slot) return;
-
-    this.timeslotService.update(slot.id, {
-      startTime: slot.startTime,
-      durationInMinutes: slot.durationInMinutes,
-      dayOfWeek: slot.dayOfWeek,
-      isActive: slot.isActive
-    }).subscribe(() => {
-      this.loadTimeSlots();
-      this.closeDialog();
-    });
-  }
-
-  deleteTimeSlot(id: number) {
-    if (confirm('Are you sure you want to delete this time slot?')) {
-      this.timeslotService.delete(id).subscribe(() => {
-        this.loadTimeSlots();
-      });
-    }
+    this.originalTimeSlot.set(null);
   }
 }

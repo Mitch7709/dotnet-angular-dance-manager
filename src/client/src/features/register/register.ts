@@ -95,7 +95,7 @@ export class Register {
   }
 
   private displayValidationErrors(errors: Record<string, string[]>) {
-    console.log('Validation errors:', errors);
+    // console.log('Validation errors:', errors);
     const toCamel = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
     Object.entries(errors).forEach(([field, messages]) => {
       const control = this.credentialsForm.get(toCamel(field));

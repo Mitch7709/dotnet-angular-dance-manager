@@ -25,7 +25,7 @@ public class CreateTimeSlotUseCase(IDbContext dbContext)
             StartTime = request.StartTime,
             DurationInMinutes = request.DurationInMinutes,
             DayOfWeek = dayOfWeekParsed,
-            IsActive = request.IsActive
+            IsActive = true
         };
 
         dbContext.Set<TimeSlot>().Add(timeSlot);

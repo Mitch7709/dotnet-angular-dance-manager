@@ -1,13 +1,7 @@
-export type CreateTimeSlotRequest = {
+export type TimeSlotRequest = {
     startTime: string;
     durationInMinutes: number;
-    dayOfWeek: string;    
-}
-
-export type UpdateTimeSlotRequest = {
-    startTime: string;
-    durationInMinutes: number;
-    dayOfWeek: string;    
+    dayOfWeek: string;  
     isActive: boolean;
 }
 

@@ -4,9 +4,8 @@ namespace Core.Features.TimeSlots.Create;
 public record CreateTimeSlotRequest(
     TimeOnly StartTime,
     int DurationInMinutes,
-    string DayOfWeek,
-    bool IsActive
-);
+    string DayOfWeek
+    );
 
 public record CreateTimeSlotResponse(
     int Id,
