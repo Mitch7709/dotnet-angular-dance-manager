@@ -3,11 +3,27 @@
     <a class="normal-case font-bold text-xl" routerLink="/">The Grove</a>
   </div>
 
+  <div class="flex-11">
+    <ul class="menu menu-horizontal gap-2 px-1">
+      <li>
+        <a routerLinkActive="active" class="btn btn-outline btn-primary">Students</a>
+      </li>
+      <li>
+        <a routerLink="/timeslot" routerLinkActive="active" class="btn btn-outline btn-primary"
+          >Time Slots</a
+        >
+      </li>
+    </ul>
+  </div>
+
   <div class="flex-none">
     <ul class="menu menu-horizontal gap-2 px-1">
-      <li><a routerLink="/students" routerLinkActive="active" class="btn btn-outline btn-primary">Students</a></li>
-      <li><a routerLink="/instructors" routerLinkActive="active" class="btn btn-outline btn-primary">Instructors</a></li>
-      <li><a routerLink="/classes" routerLinkActive="active" class="btn btn-outline btn-primary">Classes</a></li>
+      <li>
+        <a class="btn btn-outline btn-primary">Login</a>
+      </li>
+      <li>
+        <a class="btn btn-outline btn-primary">Logout</a>
+      </li>
     </ul>
   </div>
 </div>
