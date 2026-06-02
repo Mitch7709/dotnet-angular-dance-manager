@@ -9,8 +9,7 @@ public class TimeSlotReadService(IDbContext dbContext)
     public async Task<IReadOnlyList<TimeSlotResponse>> GetAllAsync()
     {
         return await dbContext.Set<TimeSlot>()
-            .OrderBy(ts => ts.DayOfWeek)
-            .ThenBy(ts => ts.StartTime)
+        .AsNoTracking()
             .Select(ts => new TimeSlotResponse
             (
                 ts.Id,
@@ -19,13 +18,29 @@ public class TimeSlotReadService(IDbContext dbContext)
                 ts.DayOfWeek,
                 ts.IsActive
             ))
-            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<TimeSlotResponse>> GetActiveAsync()
+    {
+        return await dbContext.Set<TimeSlot>()
+        .AsNoTracking()
+            .Where(ts => ts.IsActive)
+            .Select(ts => new TimeSlotResponse
+            (
+                ts.Id,
+                ts.StartTime,
+                ts.DurationInMinutes,
+                ts.DayOfWeek,
+                ts.IsActive
+            ))
             .ToListAsync();
     }
 
     public async Task<Result<TimeSlotResponse>> GetByIdAsync(int id)
     {
         var timeSlot = await dbContext.Set<TimeSlot>()
+        .AsNoTracking()
             .Where(ts => ts.Id == id)
             .Select(ts => new TimeSlotResponse
             (

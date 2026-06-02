@@ -12,12 +12,11 @@ public class CreateTimeSlotUseCase(IDbContext dbContext)
 
         var exists = await dbContext.Set<TimeSlot>()
             .AnyAsync(ts => ts.DayOfWeek == dayOfWeekParsed
-                && ts.StartTime == request.StartTime
-                && ts.DurationInMinutes == request.DurationInMinutes);
+                && ts.StartTime == request.StartTime);
 
         if (exists)
         {
-            return Result.Failure(ErrorType.Conflict, "A time slot with the same day, start time, and duration already exists.");
+            return Result.Failure(ErrorType.Conflict, "A time slot already exists with the same day and start time.");
         }
 
         var timeSlot = new TimeSlot

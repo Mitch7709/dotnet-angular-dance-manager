@@ -10,6 +10,7 @@ public class InstructorReadService(IDbContext dbContext)
     public async Task<IReadOnlyList<InstructorResponse>> GetAllAsync()
     {
         return await dbContext.Set<Instructor>()
+        .AsNoTracking()
             .Select(i => new InstructorResponse
             (
                 i.Id,
@@ -26,6 +27,7 @@ public class InstructorReadService(IDbContext dbContext)
     public async Task<Result<InstructorResponse>> GetByIdAsync(int id)
     {
         var instructor = await dbContext.Set<Instructor>()
+        .AsNoTracking()
             .Where(i => i.Id == id)
             .Select(i => new InstructorResponse
             (

@@ -18,6 +18,7 @@ public class TimeSlotModule : IModule
 
         group.MapGet("", GetTimeSlots);
         group.MapGet("/{id}", GetTimeSlotById);
+        group.MapGet("/active", GetActiveTimeSlots);
 
         group.MapPost("", CreateTimeSlot)
             .Validator<CreateTimeSlotRequest>();
@@ -31,6 +32,12 @@ public class TimeSlotModule : IModule
     private static async Task<Ok<IReadOnlyList<TimeSlotResponse>>> GetTimeSlots(TimeSlotReadService service)
     {
         var result = await service.GetAllAsync();
+        return TypedResults.Ok(result);
+    }
+
+    private static async Task<Ok<IReadOnlyList<TimeSlotResponse>>> GetActiveTimeSlots(TimeSlotReadService service)
+    {
+        var result = await service.GetActiveAsync();
         return TypedResults.Ok(result);
     }
 
