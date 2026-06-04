@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
+  AppRole,
   AuthResponse,
   LoginCreds,
   RegisterInstructorCreds,
   RegisterStudentCreds,
+  User,
 } from '../../types/DTOs/UserDTOs';
 import { tap } from 'rxjs';
-
-export type AppRole = 'Student' | 'Instructor' | 'Admin';
 
 @Injectable({
   providedIn: 'root',
@@ -17,13 +17,19 @@ export type AppRole = 'Student' | 'Instructor' | 'Admin';
 export class UserService {
   private readonly ROLE_CLAIM = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
 
+  private readonly _currentUser = signal<User | null>(null);
+  readonly currentUser = this._currentUser.asReadonly();
+
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
   login(creds: LoginCreds) {
     return this.http.post<AuthResponse>(`${this.baseUrl}/login`, creds).pipe(
       tap((response) => {
-        localStorage.setItem('token', response.token);
+        // localStorage.setItem('token', response.token);
+        const user = this.decodeUserFromToken(response.token);
+        this._currentUser.set(user);
+        // console.log('Decoded user from token:', user);
       }),
     );
   }
@@ -31,7 +37,9 @@ export class UserService {
   registerStudent(creds: RegisterStudentCreds) {
     return this.http.post<AuthResponse>(`${this.baseUrl}/register/student`, creds).pipe(
       tap((response) => {
-        localStorage.setItem('token', response.token);
+        // localStorage.setItem('token', response.token);
+        const user = this.decodeUserFromToken(response.token);
+        this._currentUser.set(user);
       }),
     );
   }
@@ -39,46 +47,35 @@ export class UserService {
   registerInstructor(creds: RegisterInstructorCreds) {
     return this.http.post<AuthResponse>(`${this.baseUrl}/register/instructor`, creds).pipe(
       tap((response) => {
-        localStorage.setItem('token', response.token);
+        // localStorage.setItem('token', response.token);
+        const user = this.decodeUserFromToken(response.token);
+        this._currentUser.set(user);
       }),
     );
   }
 
-  getToken() {
-    return localStorage.getItem('token');
+  decodeUserFromToken(token: string): User | null {
+    try {
+      const payload = this.parseJwtPayload(token);
+      const email = payload['email'];
+      const displayName = payload['given_name'] || email;
+      const roles = payload[this.ROLE_CLAIM] ?? payload['role'] ?? [];
+      const normalizedRoles = Array.isArray(roles) ? roles : [roles];
+      return { email, displayName, roles: normalizedRoles as AppRole[] };
+    }
+    catch {
+      return null;
+    }
   }
 
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    if (!token) return false;
-
-    try {
-      const payload = this.parseJwtPayload(token);
-      if (!payload?.exp) return true;
-      return payload.exp * 1000 > Date.now();
-    } catch {
-      return false;
-    }
+    return this.currentUser() !== null;
   }
 
-  getRoles(): AppRole[] {
-    const token = this.getToken();
-    if (!token) return [];
-
-    try {
-      const payload = this.parseJwtPayload(token);
-      const raw = payload[this.ROLE_CLAIM] ?? payload['role'];
-      if (Array.isArray(raw)) return raw as AppRole[];
-      if (typeof raw === 'string') return [raw as AppRole];
-      return [];
-    } catch {
-      return [];
-    }
-  }
-
-  hasAnyRole(required: AppRole[]): boolean {
-    const current = this.getRoles();
-    return required.some((r) => current.includes(r));
+  hasAnyRole(requiredRoles: AppRole[]): boolean {
+    const user = this.currentUser();
+    if (!user) return false;
+    return requiredRoles.some(role => user.roles.includes(role));
   }
 
   private parseJwtPayload(token: string): any {

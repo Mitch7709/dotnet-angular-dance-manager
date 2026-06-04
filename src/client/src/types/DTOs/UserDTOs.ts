@@ -1,3 +1,4 @@
+
 export type LoginCreds = {
   email: string;
   password: string;
@@ -25,3 +26,11 @@ export type AuthResponse = {
     userId: string;
     token: string;
 }
+
+export type User = {
+    email: string;
+    displayName: string;
+    roles: AppRole[];
+}
+
+export type AppRole = 'Student' | 'Instructor' | 'Admin';

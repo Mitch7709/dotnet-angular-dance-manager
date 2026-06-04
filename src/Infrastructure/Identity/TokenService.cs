@@ -28,7 +28,8 @@ public class TokenService(UserManager<AppUser> userManager, IOptions<JwtOptions>
     {
         new Claim(JwtRegisteredClaimNames.Sub, user.Id),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(JwtRegisteredClaimNames.Email, user.Email!)
+        new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+        new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName!)
     }
         .Union(userClaims)
         .Union(roleClaims);

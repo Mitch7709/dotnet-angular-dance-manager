@@ -1,6 +1,7 @@
 import { CanActivateFn } from '@angular/router';
-import { AppRole, UserService } from '../services/user-service';
+import { UserService } from '../services/user-service';
 import { inject } from '@angular/core';
+import { AppRole } from '../../types/DTOs/UserDTOs';
 
 export const roleGuard: CanActivateFn = (route, state) => {
   const user = inject(UserService);

@@ -4,6 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { TextInput } from '../../shared/text-input/text-input';
 import { UserService } from '../../core/services/user-service';
 import { take } from 'rxjs';
+import { ToastService } from '../../core/services/toast-service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import { take } from 'rxjs';
 })
 export class Login {
   private userService = inject(UserService);
+  private toast = inject(ToastService);
   private fb = inject(FormBuilder);
   protected credentialsForm: FormGroup;
 
@@ -34,6 +36,7 @@ export class Login {
     this.userService.login(loginCreds).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
+        this.toast.success('Login successful!');
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400 && error.error?.errors) {
@@ -47,7 +50,7 @@ export class Login {
             control?.valueChanges.pipe(take(1)).subscribe(() => control.setErrors(null));
           });
         } else {
-          console.error('Login failed:', error.error.error);
+          this.toast.error('Login failed: ' + (error.error?.error || 'Unknown error') );
         }
       },
     });
