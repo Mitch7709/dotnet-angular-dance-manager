@@ -18,12 +18,15 @@
 
   <div class="flex-none">
     <ul class="menu menu-horizontal gap-2 px-1">
-      <li>
-        <a class="btn btn-outline btn-primary">Login</a>
-      </li>
-      <li>
-        <a class="btn btn-outline btn-primary">Logout</a>
-      </li>
+      @if (!userService.isAuthenticated()) {
+        <li>
+          <a class="btn btn-outline btn-primary">Login</a>
+        </li>
+      } @else {
+        <li>
+          <a class="btn btn-outline btn-primary">Logout</a>
+        </li>
+      }
     </ul>
   </div>
 </div>

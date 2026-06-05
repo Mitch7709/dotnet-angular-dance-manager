@@ -23,13 +23,16 @@ export class UserService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
+  constructor() {
+    this.hydrateUserFromStorage();
+  }
+
   login(creds: LoginCreds) {
     return this.http.post<AuthResponse>(`${this.baseUrl}/login`, creds).pipe(
       tap((response) => {
-        // localStorage.setItem('token', response.token);
         const user = this.decodeUserFromToken(response.token);
         this._currentUser.set(user);
-        // console.log('Decoded user from token:', user);
+        sessionStorage.setItem('token', response.token);
       }),
     );
   }
@@ -37,9 +40,9 @@ export class UserService {
   registerStudent(creds: RegisterStudentCreds) {
     return this.http.post<AuthResponse>(`${this.baseUrl}/register/student`, creds).pipe(
       tap((response) => {
-        // localStorage.setItem('token', response.token);
         const user = this.decodeUserFromToken(response.token);
         this._currentUser.set(user);
+        sessionStorage.setItem('token', response.token);
       }),
     );
   }
@@ -47,25 +50,16 @@ export class UserService {
   registerInstructor(creds: RegisterInstructorCreds) {
     return this.http.post<AuthResponse>(`${this.baseUrl}/register/instructor`, creds).pipe(
       tap((response) => {
-        // localStorage.setItem('token', response.token);
         const user = this.decodeUserFromToken(response.token);
         this._currentUser.set(user);
+        sessionStorage.setItem('token', response.token);
       }),
     );
   }
 
-  decodeUserFromToken(token: string): User | null {
-    try {
-      const payload = this.parseJwtPayload(token);
-      const email = payload['email'];
-      const displayName = payload['given_name'] || email;
-      const roles = payload[this.ROLE_CLAIM] ?? payload['role'] ?? [];
-      const normalizedRoles = Array.isArray(roles) ? roles : [roles];
-      return { email, displayName, roles: normalizedRoles as AppRole[] };
-    }
-    catch {
-      return null;
-    }
+  logout() {
+    this._currentUser.set(null);
+    sessionStorage.removeItem('token');
   }
 
   isAuthenticated(): boolean {
@@ -75,7 +69,37 @@ export class UserService {
   hasAnyRole(requiredRoles: AppRole[]): boolean {
     const user = this.currentUser();
     if (!user) return false;
-    return requiredRoles.some(role => user.roles.includes(role));
+    return requiredRoles.some((role) => user.roles.includes(role));
+  }
+
+  private decodeUserFromToken(token: string): User | null {
+    try {
+      const payload = this.parseJwtPayload(token);
+      const email = payload['email'];
+      const displayName = payload['given_name'] || email;
+      const roles = payload[this.ROLE_CLAIM] ?? payload['role'] ?? [];
+      const normalizedRoles = Array.isArray(roles) ? roles : [roles];
+      return { email, displayName, roles: normalizedRoles as AppRole[] };
+    } catch {
+      return null;
+    }
+  }
+
+  private hydrateUserFromStorage(): void {
+    const token = sessionStorage.getItem('token');
+    if (!token) return;
+
+    const user = this.decodeUserFromToken(token);
+    const payload = user ? this.parseJwtPayload(token) : null;
+    const expMs = payload?.exp ? payload.exp * 1000 : null;
+    const isExpired = expMs !== null && Date.now() >= expMs;
+
+    if (!user || isExpired) {
+      this.logout();
+      return;
+    }
+
+    this._currentUser.set(user);
   }
 
   private parseJwtPayload(token: string): any {

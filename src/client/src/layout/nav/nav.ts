@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { UserService } from '../../core/services/user-service';
 
 @Component({
   selector: 'app-nav',
@@ -9,6 +10,8 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class Nav implements OnInit {
   private router = inject(Router);
+
+  protected userService = inject(UserService);
 
   ngOnInit(): void {
     document.documentElement.setAttribute('data-theme', 'light');
