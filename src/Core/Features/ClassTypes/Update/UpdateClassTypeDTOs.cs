@@ -1,6 +1,4 @@
 using Core.Features.ClassTypes.Read;
-using System;
-using System.Collections.Generic;
 
 namespace Core.Features.ClassTypes.Update;
 

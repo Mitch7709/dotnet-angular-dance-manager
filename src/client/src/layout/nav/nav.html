@@ -1,26 +1,65 @@
-<div class="navbar bg-base-100 shadow-sm px-4">
+<header class="p-3 w-full fixed top-0 z-50 bg-linear-to-r from-primary to-black">
+  <div class="flex align-middle items-center px-10 mx-auto gap-6">
+    <div class="text-white">
+      <a routerLink="/" routerLinkActive="text-accent" [routerLinkActiveOptions]="{ exact: true}"
+      class="flex items-center gap-3 max-h-16 border-r-white border-r-2 pr-6">
+      <h3 class="text-2xl font-semibold uppercase">The Grove</h3>
+      </a>
+    </div>
+    <nav class="flex gap-3 my-2 uppercase text-lg text-white">
+      <a routerLinkActive="text-accent" class="hover:text-gray-300">Classes</a>
+      <a routerLinkActive="text-accent" class="hover:text-gray-300">Schedule</a>
+      <a routerLinkActive="text-accent" class="hover:text-gray-300">Instructors</a>
+      <a routerLink="/timeslot" routerLinkActive="text-accent" class="hover:text-gray-300">Time Slots</a>
+    </nav>
+    <div class="flex align-middle ml-auto gap-3">
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="flex hover:text-gray-300 items-center text-white text-xl gap-3 cursor-pointer">Account</div>
+        <ul tabindex="-1" class="menu dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow-sm" 
+        (click)="handleSelectUserItem()">
+          @if (!userService.isAuthenticated()) {
+            <li>
+              <a routerLink="/auth" class="btn btn-outline btn-primary">Login</a>
+            </li>
+          } @else {
+            <li>
+              <a class="btn btn-outline btn-primary">Logout</a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- <div class="navbar bg-base-100 shadow-sm px-4">
   <div class="flex-1 ml-5">
     <a class="normal-case font-bold text-xl" routerLink="/">The Grove</a>
   </div>
 
   <div class="flex-11">
-    <ul class="menu menu-horizontal gap-2 px-1">
-      <li>
-        <a routerLinkActive="active" class="btn btn-outline btn-primary">Students</a>
-      </li>
-      <li>
-        <a routerLink="/timeslot" routerLinkActive="active" class="btn btn-outline btn-primary"
-          >Time Slots</a
-        >
-      </li>
-    </ul>
+    <div class="flex items-stretch">
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost rounded-field">Dropdown</div>
+        <ul tabindex="-1" class="menu dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow-sm">
+          <li>
+            <a class="btn btn-outline btn-primary">Class Types</a>
+          </li>
+          <li>
+            <a routerLink="/timeslot" routerLinkActive="active" class="btn btn-outline btn-primary"
+              >Time Slots</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <div class="flex-none">
     <ul class="menu menu-horizontal gap-2 px-1">
       @if (!userService.isAuthenticated()) {
         <li>
-          <a class="btn btn-outline btn-primary">Login</a>
+          <a routerLink="/auth" class="btn btn-outline btn-primary">Login</a>
         </li>
       } @else {
         <li>
@@ -29,4 +68,4 @@
       }
     </ul>
   </div>
-</div>
+</div> -->

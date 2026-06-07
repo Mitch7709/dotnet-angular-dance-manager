@@ -5,11 +5,11 @@ import { RouterLink } from '@angular/router';
   selector: 'app-home',
   imports: [RouterLink],
   templateUrl: './home.html',
-  styleUrl: './home.css',
+  styleUrls: ['./home.css'],
 })
 export class Home {
   setTheme(theme: string): void {
-    console.log(`Setting theme to ${theme}`);
+    // console.log(`Setting theme to ${theme}`);
     document.documentElement.setAttribute('data-theme', theme);
   }
 }

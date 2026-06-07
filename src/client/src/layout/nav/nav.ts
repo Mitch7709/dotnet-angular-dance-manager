@@ -16,4 +16,11 @@ export class Nav implements OnInit {
   ngOnInit(): void {
     document.documentElement.setAttribute('data-theme', 'light');
   }
+
+  handleSelectUserItem() {
+    const elem = document.activeElement as HTMLDivElement;
+    if (elem) {
+      elem.blur();
+    }
+  }
 }

@@ -1,0 +1,40 @@
+<div class="flex flex-col w-full">
+  <div class="grid grid-cols-1 justify-between items-center overflow-x-auto m-8">
+    <div class="items-end">
+      <button class="btn btn-primary">Create Class Type</button>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Style</th>
+          <th>Level</th>
+          <th>Instructors</th>
+          <th>Actions</th>          
+        </tr>
+      </thead>
+      <tbody>
+        @for (classType of classTypes(); track classType.id) {
+          <tr>
+            <td>{{ classType.id }}</td>
+            <td>{{ classType.name }}</td>
+            <td>{{ classType.description }}</td>
+            <td>{{ classType.style }}</td>
+            <td>{{ classType.level }}</td>
+            <td>
+                <button class="btn btn-sm btn-secondary">
+                    View Instructors
+                </button>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-primary">Edit</button>
+              <button class="btn btn-sm btn-danger">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

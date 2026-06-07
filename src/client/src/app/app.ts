@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { Nav } from "../layout/nav/nav";
 
 @Component({
@@ -10,4 +10,6 @@ import { Nav } from "../layout/nav/nav";
 })
 export class App {
   protected readonly title = 'Welcome to The Grove!'
+  
+  protected router = inject(Router);
 }
