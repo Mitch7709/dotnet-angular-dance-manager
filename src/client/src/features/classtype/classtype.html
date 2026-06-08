@@ -12,7 +12,7 @@
           <th>Style</th>
           <th>Level</th>
           <th>Instructors</th>
-          <th>Actions</th>          
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -24,9 +24,7 @@
             <td>{{ classType.style }}</td>
             <td>{{ classType.level }}</td>
             <td>
-                <button class="btn btn-sm btn-secondary">
-                    View Instructors
-                </button>
+              <button class="btn btn-sm btn-secondary">View Instructors</button>
             </td>
             <td>
               <button class="btn btn-sm btn-primary">Edit</button>
@@ -38,3 +36,89 @@
     </table>
   </div>
 </div>
+
+<dialog id="classtype-dialog" class="modal">
+  <form class="modal-box" (ngSubmit)="isCreating() ? saveNew() : saveEdit()">
+    <h3 class="font-bold text-lg">Create Class Type</h3>
+    <!-- Form fields for creating/editing class type go here -->
+    @if (selectedClassType(); as selected) {
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="label">
+            <span class="label-text">Name</span>
+          </label>
+          <input
+            type="text"
+            class="input input-bordered"
+            name="name"
+            [(ngModel)]="selected.name"
+            required
+          />
+        </div>
+        <div>
+          <label class="label">
+            <span class="label-text">Description</span>
+          </label>
+          <textarea
+            class="input input-bordered"
+            name="description"
+            [(ngModel)]="selected.description"
+            required
+          ></textarea>
+        </div>
+        <div>
+          <label class="label">
+            <span class="label-text">Style</span>
+          </label>
+          <input
+            type="text"
+            class="input input-bordered"
+            name="style"
+            [(ngModel)]="selected.style"
+            required
+          />
+        </div>
+        <div>
+          <label class="label">
+            <span class="label-text">Level</span>
+          </label>
+          <input
+            type="text"
+            class="input input-bordered"
+            name="level"
+            [(ngModel)]="selected.level"
+            required
+          />
+        </div>
+        <div>
+            <span class="label-text">Active</span>
+            <select
+              class="select select-bordered w-full"
+              name="isActive"
+              [(ngModel)]="selected.isActive"
+              required
+            >
+              <option value="" disabled selected>Select status</option>
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+          <div>
+            <span class="label-text">Instructors</span>
+            <select
+              class="select select-bordered w-full"
+              name="instructors"
+              [(ngModel)]="selected.qualifiedInstructors"
+              multiple
+            >
+              <option *ngFor="let instructor of instructors" [value]="instructor.id">{{ instructor.name }}</option>
+            </select>
+          </div>
+      </div>
+    }
+    <div class="modal-action">
+        <button class="btn" type="button" (click)="closeDialog()">Close</button>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </div>
+  </form>
+</dialog>

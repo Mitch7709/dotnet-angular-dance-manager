@@ -3,6 +3,7 @@ import { TimeslotService } from '../../core/services/timeslot-service';
 import { TimeSlotRequest, TimeSlotResponse } from '../../types/DTOs/TimeSlotDTOs';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../core/services/toast-service';
+import { getErrorMessage } from '../../core/utils/error-handler';
 
 @Component({
   selector: 'app-timeslot',
@@ -53,7 +54,7 @@ export class Timeslot {
         this.toastService.success('Time slot created successfully!');
       },
       error: (error) => {
-        this.toastService.error(this.getErrorMessage(error, 'Failed to create time slot.'));
+        this.toastService.error(getErrorMessage(error, 'Failed to create time slot.'));
       },
     });
   }
@@ -89,7 +90,7 @@ export class Timeslot {
       },
       error: (error) => {
         // console.error('Failed to update time slot:', error);
-        this.toastService.error(this.getErrorMessage(error, 'Failed to update time slot.'));
+        this.toastService.error(getErrorMessage(error, 'Failed to update time slot.'));
       },
     });
   }
@@ -103,7 +104,7 @@ export class Timeslot {
         },
         error: (error) => {
           // console.error('Failed to delete time slot:', error.error);
-          this.toastService.error(this.getErrorMessage(error, 'Failed to delete time slot.'));
+          this.toastService.error(getErrorMessage(error, 'Failed to delete time slot.'));
         },
       });
     }
@@ -119,12 +120,5 @@ export class Timeslot {
     dialog?.close();
     this.selectedTimeSlot.set(null);
     this.originalTimeSlot.set(null);
-  }
-
-  private getErrorMessage(error: any, fallback: string): string {
-    const errors = error.error?.errors as Record<string, string[]> | undefined;
-    if (errors) return Object.values(errors).flat().join('\n');
-    if (typeof error.error === 'string') return error.error;
-    return fallback;
   }
 }

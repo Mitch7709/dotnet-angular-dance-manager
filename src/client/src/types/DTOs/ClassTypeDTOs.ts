@@ -1,3 +1,5 @@
+import { Instructor } from "./InstructorDTOs";
+
 export type ClassTypeRequest = {
     name: string;
     description: string;
@@ -15,4 +17,5 @@ export type ClassTypeResponse = {
     level: number;
     isActive: boolean;
     qualifiedInstructors: number[];
+    instructors: Instructor[];
 }
