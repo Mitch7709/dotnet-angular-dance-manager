@@ -20,12 +20,7 @@ public class ClassTypeReadService(IDbContext dbContext)
                 c.Style,
                 c.Level,
                 c.IsActive,
-                c.QualifiedInstructors.Select(i => new QualifiedInstructorSummary
-                (
-                    i.Id,
-                    i.AppUser.FirstName,
-                    i.AppUser.LastName
-                )).ToList()
+                c.QualifiedInstructors.Select(i => i.Id).ToList()
             ))
             .ToListAsync();
     }
@@ -42,12 +37,7 @@ public class ClassTypeReadService(IDbContext dbContext)
                 c.Style,
                 c.Level,
                 c.IsActive,
-                c.QualifiedInstructors.Select(i => new QualifiedInstructorSummary
-                (
-                    i.Id,
-                    i.AppUser.FirstName,
-                    i.AppUser.LastName
-                )).ToList()
+                c.QualifiedInstructors.Select(i => i.Id).ToList()
             ))
             .FirstOrDefaultAsync();
 

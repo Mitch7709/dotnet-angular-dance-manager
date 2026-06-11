@@ -10,11 +10,5 @@ public record ClassTypeResponse(
     string Style,
     int Level,
     bool IsActive,
-    IReadOnlyList<QualifiedInstructorSummary> QualifiedInstructors
-);
-
-public record QualifiedInstructorSummary(
-    int Id,
-    string FirstName,
-    string LastName
+    IReadOnlyList<int> QualifiedInstructorIds
 );

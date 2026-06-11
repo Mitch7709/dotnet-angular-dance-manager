@@ -110,7 +110,7 @@ export class Timeslot {
     }
   }
 
-  openDialog() {
+  private openDialog() {
     const dialog = document.getElementById('timeslot-dialog') as HTMLDialogElement;
     dialog?.showModal();
   }

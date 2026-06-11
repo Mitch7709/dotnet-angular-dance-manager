@@ -44,11 +44,7 @@ public class UpdateClassTypeUseCase(IDbContext dbContext)
             classType.Style,
             classType.Level,
             classType.IsActive,
-            instructors.Select(i => new QualifiedInstructorSummary(
-                i.Id,
-                i.AppUser.FirstName,
-                i.AppUser.LastName
-            )).ToList()
+            instructors.Select(i => i.Id).ToList()
         );
     }
 }

@@ -18,5 +18,5 @@ public record UpdateClassTypeResponse(
     string Style,
     int Level,
     bool IsActive,
-    IReadOnlyList<QualifiedInstructorSummary> QualifiedInstructors
+    IReadOnlyList<int> QualifiedInstructorIds
 );

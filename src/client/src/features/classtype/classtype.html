@@ -1,7 +1,7 @@
 <div class="flex flex-col w-full">
   <div class="grid grid-cols-1 justify-between items-center overflow-x-auto m-8">
     <div class="items-end">
-      <button class="btn btn-primary">Create Class Type</button>
+      <button class="btn btn-primary" (click)="openNewDialog()">Create Class Type</button>
     </div>
     <table class="table">
       <thead>
@@ -27,8 +27,8 @@
               <button class="btn btn-sm btn-secondary">View Instructors</button>
             </td>
             <td>
-              <button class="btn btn-sm btn-primary">Edit</button>
-              <button class="btn btn-sm btn-danger">Delete</button>
+              <button class="btn btn-sm btn-primary" (click)="openEditDialog(classType)">Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteClassType(classType.id)">Delete</button>
             </td>
           </tr>
         }
@@ -39,7 +39,7 @@
 
 <dialog id="classtype-dialog" class="modal">
   <form class="modal-box" (ngSubmit)="isCreating() ? saveNew() : saveEdit()">
-    <h3 class="font-bold text-lg">Create Class Type</h3>
+    <h3 class="font-bold text-lg">{{ isCreating() ? 'Create Class Type' : 'Edit Class Type' }}</h3>
     <!-- Form fields for creating/editing class type go here -->
     @if (selectedClassType(); as selected) {
       <div class="grid grid-cols-2 gap-4">
@@ -57,17 +57,6 @@
         </div>
         <div>
           <label class="label">
-            <span class="label-text">Description</span>
-          </label>
-          <textarea
-            class="input input-bordered"
-            name="description"
-            [(ngModel)]="selected.description"
-            required
-          ></textarea>
-        </div>
-        <div>
-          <label class="label">
             <span class="label-text">Style</span>
           </label>
           <input
@@ -78,12 +67,24 @@
             required
           />
         </div>
+        <div class="col-span-2">
+          <label class="label">
+            <span class="label-text">Description</span>
+          </label>
+          <textarea
+            class="input input-bordered w-full"
+            name="description"
+            [(ngModel)]="selected.description"
+            required
+          ></textarea>
+        </div>
+
         <div>
           <label class="label">
             <span class="label-text">Level</span>
           </label>
           <input
-            type="text"
+            type="number"
             class="input input-bordered"
             name="level"
             [(ngModel)]="selected.level"
@@ -91,34 +92,41 @@
           />
         </div>
         <div>
+          <label class="label">
             <span class="label-text">Active</span>
-            <select
-              class="select select-bordered w-full"
-              name="isActive"
-              [(ngModel)]="selected.isActive"
-              required
-            >
-              <option value="" disabled selected>Select status</option>
-              <option value="true">Active</option>
-              <option value="false">Inactive</option>
-            </select>
-          </div>
-          <div>
-            <span class="label-text">Instructors</span>
-            <select
-              class="select select-bordered w-full"
-              name="instructors"
-              [(ngModel)]="selected.qualifiedInstructors"
-              multiple
-            >
-              <option *ngFor="let instructor of instructors" [value]="instructor.id">{{ instructor.name }}</option>
-            </select>
-          </div>
+          </label>
+          <select
+            class="select select-bordered w-full"
+            name="isActive"
+            [(ngModel)]="selected.isActive"
+            required
+          >
+            <option value="" disabled selected>Select status</option>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+        <div>
+          <span class="label-text">Instructors</span>
+          <select
+            class="select select-bordered w-full"
+            name="instructors"
+            [(ngModel)]="selected.qualifiedInstructorIds"
+            multiple
+          >
+          @for (instructor of instructors(); track instructor.id)
+          {
+            <option [value]="instructor.id">
+              {{ instructor.firstName }} {{ instructor.lastName }}
+            </option>
+          }
+          </select>
+        </div>
       </div>
     }
     <div class="modal-action">
-        <button class="btn" type="button" (click)="closeDialog()">Close</button>
-        <button class="btn btn-primary" type="submit">Save</button>
-      </div>
+      <button class="btn" type="button" (click)="closeDialog()">Close</button>
+      <button class="btn btn-primary" type="submit">Save</button>
+    </div>
   </form>
 </dialog>
