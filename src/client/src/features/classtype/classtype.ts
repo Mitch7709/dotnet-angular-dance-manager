@@ -1,9 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ClasstypeService } from '../../core/services/classtype-service';
-import {
-  ClassTypeRequest,
-  ClassTypeResponse,
-} from '../../types/DTOs/ClassTypeDTOs';
+import { ClassTypeRequest, ClassTypeResponse } from '../../types/DTOs/ClassTypeDTOs';
 import { ToastService } from '../../core/services/toast-service';
 import { getErrorMessage } from '../../core/utils/error-handler';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +24,8 @@ export class Classtype {
   instructors = signal<Instructor[] | null>(null);
   selectedClassType = signal<ClassTypeRequest | null>(null);
   originalClassType = signal<ClassTypeResponse | null>(null);
+
+  instructorsForSelectedClassType = signal<Instructor[]>([]);
 
   protected isCreating = signal(false);
 
@@ -105,7 +104,16 @@ export class Classtype {
 
   deleteClassType(id: number) {
     if (!confirm('Are you sure you want to delete this class type?')) return;
-    this.toastService.info('Deleting class type...');
+
+    this.classtypeService.delete(id).subscribe({
+      next: () => {
+        this.loadClassTypes();
+        this.toastService.success('Class type deleted successfully!');
+      },
+      error: (error) => {
+        this.toastService.error(getErrorMessage(error, 'Failed to delete class type.'));
+      },
+    });
   }
 
   private openDialog() {
@@ -113,9 +121,34 @@ export class Classtype {
     dialog?.showModal();
   }
 
+  protected openInstructorDialog(classType?: ClassTypeResponse) {
+    if (!classType) return;
+
+    this.selectedClassType.set({
+      ...classType,
+    });
+
+    this.instructorsForSelectedClassType.set(
+      this.instructors()!.filter((instructor) =>
+        classType.qualifiedInstructorIds.includes(instructor.id),
+      ),
+    );
+
+    const dialog = document.getElementById('instructors-dialog') as HTMLDialogElement;
+    dialog?.showModal();
+  }
+
+  closeInstructorDialog() {
+    const dialog = document.getElementById('instructors-dialog') as HTMLDialogElement;
+    dialog?.close();
+    this.instructorsForSelectedClassType.set([]);
+    this.selectedClassType.set(null);
+  }
+
   closeDialog() {
     const dialog = document.getElementById('classtype-dialog') as HTMLDialogElement;
     dialog?.close();
     this.selectedClassType.set(null);
+    this.originalClassType.set(null);
   }
 }

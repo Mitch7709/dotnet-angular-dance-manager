@@ -24,7 +24,7 @@
             <td>{{ classType.style }}</td>
             <td>{{ classType.level }}</td>
             <td>
-              <button class="btn btn-sm btn-secondary">View Instructors</button>
+              <button class="btn btn-sm btn-secondary" (click)="openInstructorDialog(classType)">View Instructors</button>
             </td>
             <td>
               <button class="btn btn-sm btn-primary" (click)="openEditDialog(classType)">Edit</button>
@@ -36,6 +36,20 @@
     </table>
   </div>
 </div>
+
+<dialog id="instructors-dialog" class="modal">
+  <form class="modal-box">
+    <h3 class="font-bold text-lg">{{ selectedClassType()?.name }} instructors</h3>
+    <ul class="list-disc pl-5">
+      @for (instructor of instructorsForSelectedClassType(); track instructor.id) {
+        <li>{{ instructor.firstName }} {{ instructor.lastName }}</li>
+      }
+    </ul>
+    <div class="modal-action">
+      <button class="btn" type="button" (click)="closeInstructorDialog()">Close</button>
+    </div>
+  </form>
+</dialog>
 
 <dialog id="classtype-dialog" class="modal">
   <form class="modal-box" (ngSubmit)="isCreating() ? saveNew() : saveEdit()">
