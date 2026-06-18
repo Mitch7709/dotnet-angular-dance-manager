@@ -20,7 +20,7 @@ export class ClasstypeService {
     return this.http.post<ClassTypeResponse>(this.baseUrl, body);
   }
   update(id: number, body: ClassTypeRequest) {
-    return this.http.put(`${this.baseUrl}/${id}`, body);
+    return this.http.put<ClassTypeResponse>(`${this.baseUrl}/${id}`, body);
   }
   delete(id: number) {
     return this.http.delete(`${this.baseUrl}/${id}`);

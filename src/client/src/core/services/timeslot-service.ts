@@ -20,7 +20,7 @@ export class TimeslotService {
     return this.http.post<TimeSlotResponse>(this.baseUrl, body);
   }
   update(id: number, body: TimeSlotRequest) {
-    return this.http.put(`${this.baseUrl}/${id}`, body);
+    return this.http.put<TimeSlotResponse>(`${this.baseUrl}/${id}`, body);
   }
   delete(id: number) {
     return this.http.delete(`${this.baseUrl}/${id}`);

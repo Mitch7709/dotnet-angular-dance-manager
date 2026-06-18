@@ -7,10 +7,10 @@
       </a>
     </div>
     <nav class="flex gap-3 my-2 uppercase text-lg text-white">
-      <a routerLinkActive="text-accent" class="hover:text-gray-300">Classes</a>
+      <a routerLink="/sessions" routerLinkActive="text-accent" class="hover:text-gray-300">Classes</a>
       <a routerLinkActive="text-accent" class="hover:text-gray-300">Schedule</a>
-      <a routerLinkActive="text-accent" class="hover:text-gray-300">Instructors</a>
-      <a routerLink="/timeslot" routerLinkActive="text-accent" class="hover:text-gray-300">Time Slots</a>
+      <a routerLink="/classtypes" routerLinkActive="text-accent" class="hover:text-gray-300">Class Types</a>
+      <a routerLink="/timeslots" routerLinkActive="text-accent" class="hover:text-gray-300">Time Slots</a>
     </nav>
     <div class="flex align-middle ml-auto gap-3">
       <div class="dropdown dropdown-end">
@@ -23,7 +23,7 @@
             </li>
           } @else {
             <li>
-              <a class="btn btn-outline btn-primary">Logout</a>
+              <a class="btn btn-outline btn-primary" (click)="handleLogout()">Logout</a>
             </li>
           }
         </ul>

@@ -4,19 +4,26 @@ import { AuthComponent } from '../features/auth/auth.component';
 import { Timeslot } from '../features/timeslot/timeslot';
 import { Classtype } from '../features/classtype/classtype';
 import { roleGuard } from '../core/guards/role-guard';
+import { Session } from '../features/session/session';
 
 export const routes: Routes = [
   { path: '', component: Home },
   { path: 'auth', component: AuthComponent },
   {
-    path: 'timeslot',
+    path: 'timeslots',
     component: Timeslot,
     canActivate: [roleGuard],
     data: { roles: ['Instructor', 'Admin'] },
   },
   {
-    path: 'classtype',
+    path: 'classtypes',
     component: Classtype,
+    canActivate: [roleGuard],
+    data: { roles: ['Instructor', 'Admin'] },
+  },
+  {
+    path: 'sessions',
+    component: Session,
     canActivate: [roleGuard],
     data: { roles: ['Instructor', 'Admin'] },
   }

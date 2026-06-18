@@ -23,4 +23,9 @@ export class Nav implements OnInit {
       elem.blur();
     }
   }
+
+  handleLogout() {
+    this.userService.logout();
+    // this.router.navigate(['/']);
+  }
 }
