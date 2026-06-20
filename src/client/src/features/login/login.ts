@@ -5,6 +5,7 @@ import { TextInput } from '../../shared/text-input/text-input';
 import { UserService } from '../../core/services/user-service';
 import { take } from 'rxjs';
 import { ToastService } from '../../core/services/toast-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class Login {
   private userService = inject(UserService);
   private toast = inject(ToastService);
   private fb = inject(FormBuilder);
+  private router = inject(Router);
   protected credentialsForm: FormGroup;
 
   constructor() {
@@ -35,8 +37,9 @@ export class Login {
 
     this.userService.login(loginCreds).subscribe({
       next: (response) => {
-        console.log('Login successful:', response);
+        // console.log('Login successful:', response);
         this.toast.success('Login successful!');
+        this.router.navigate(['/']); // Redirect to home or dashboard after successful login
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400 && error.error?.errors) {

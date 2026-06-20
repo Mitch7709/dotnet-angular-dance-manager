@@ -18,8 +18,6 @@ export class Classtype {
   private instructorService = inject(InstructorService);
   private toastService = inject(ToastService);
 
-  intialInstructorId: number = 1;
-
   classTypes = signal<ClassTypeResponse[] | null>(null);
   instructors = signal<Instructor[] | null>(null);
   selectedClassType = signal<ClassTypeRequest | null>(null);
@@ -46,6 +44,19 @@ export class Classtype {
     });
   }
 
+  openNewDialog() {
+    this.isCreating.set(true);
+    this.selectedClassType.set({
+      name: '',
+      description: '',
+      style: '',
+      level: 0,
+      isActive: true,
+      qualifiedInstructorIds: [],
+    });
+    this.openDialog();
+  }
+
   saveNew() {
     const newClassType = this.selectedClassType();
     if (!newClassType) return;
@@ -62,16 +73,13 @@ export class Classtype {
     });
   }
 
-  openNewDialog() {
-    this.isCreating.set(true);
+  openEditDialog(classType: ClassTypeResponse) {
+    this.isCreating.set(false);
     this.selectedClassType.set({
-      name: '',
-      description: '',
-      style: '',
-      level: 0,
-      isActive: true,
-      qualifiedInstructorIds: [],
+      ...classType,
+      qualifiedInstructorIds: classType.qualifiedInstructorIds || [],
     });
+    this.originalClassType.set({ ...classType });
     this.openDialog();
   }
 
@@ -90,16 +98,6 @@ export class Classtype {
         this.toastService.error(getErrorMessage(error, 'Failed to update class type.'));
       },
     });
-  }
-
-  openEditDialog(classType: ClassTypeResponse) {
-    this.isCreating.set(false);
-    this.selectedClassType.set({
-      ...classType,
-      qualifiedInstructorIds: classType.qualifiedInstructorIds || [],
-    });
-    this.originalClassType.set({ ...classType });
-    this.openDialog();
   }
 
   deleteClassType(id: number) {

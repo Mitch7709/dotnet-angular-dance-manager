@@ -1,1 +1,96 @@
-<p>session works!</p>
+<div class="flex flex-col w-full">
+  <div class="grid grid-cols-1 justify-between items-center overflow-x-auto m-8">
+    <div class="items-end">
+      <button class="btn btn-primary" (click)="openNewDialog()">Create New Session</button>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Session Date</th>
+          <th>Session Status</th>
+          <th>Price</th>
+          <th>Instructor</th>
+          <th>Class Type</th>
+          <!-- <th>Time Slot</th> -->
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (session of sessions(); track session.id) {
+          <tr>
+            <td>{{ session.sessionDate | date: 'shortDate' }}</td>
+            <td>{{ session.status }}</td>
+            <td>{{ session.price | currency }}</td>
+            <td>{{ getSessionInstructor(session.instructorId) }}</td>
+            <td>{{ getSessionClassType(session.classTypeId) }}</td>
+            <td>
+              <button class="btn btn-sm btn-primary" (click)="openEditDialog(session)">Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteSession(session.id)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<dialog id="session-dialog" class="modal">
+  <form class="modal-box" (ngSubmit)="isCreating() ? saveNew() : saveEdit()">
+    <h3 class="font-bold text-lg">{{ isCreating() ? 'Create Session' : 'Edit Session' }}</h3>
+    <!-- Form fields for creating/editing session go here -->
+    @if (selectedSession(); as session) {
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="sessionDate" class="block text-sm font-medium text-gray-700">Session Date</label>
+          <input type="date" id="sessionDate" class="input input-bordered w-full" [(ngModel)]="session.sessionDate" name="sessionDate" required>  
+        </div>
+        <div>
+          <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+          <input type="number" id="price" class="input input-bordered w-full" [(ngModel)]="session.price" name="price" required>
+        </div>
+        @if (isCreating()) {
+          <div>
+            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+            <select id="status" class="select select-bordered w-full" [(ngModel)]="session.status" name="status" required>
+              <option value="" disabled selected>Select status</option>
+              <option value="Scheduled">Scheduled</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+        }
+        <div>
+          <label for="instructor" class="block text-sm font-medium text-gray-700">Instructor</label>
+          <select id="instructor" class="select select-bordered w-full" [(ngModel)]="session.instructorId" name="instructorId" required>
+            <option value="" disabled selected>Select instructor</option>
+            @for (instructor of instructors(); track instructor.id) {
+              <option [value]="instructor.id">{{ instructor.firstName }} {{ instructor.lastName }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label for="classType" class="block text-sm font-medium text-gray-700">Class Type</label>
+          <select id="classType" class="select select-bordered w-full" [(ngModel)]="session.classTypeId" name="classTypeId" required>
+            <option value="" disabled selected>Select class type</option>
+            @for (classType of classTypes(); track classType.id) {
+              <option [value]="classType.id">{{ classType.name }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label for="timeSlot" class="block text-sm font-medium text-gray-700">Time Slot</label>
+          <select id="timeSlot" class="select select-bordered w-full" [(ngModel)]="session.timeSlotId" name="timeSlotId" required>
+            <option value="" disabled selected>Select time slot</option>
+            @for (timeSlot of timeSlots(); track timeSlot.id) {
+              <option [value]="timeSlot.id">{{ timeSlot.dayOfWeek }} {{ timeSlot.startTime }} - {{ timeSlot.durationInMinutes }} minutes</option>
+            }
+          </select>
+        </div>
+      </div>
+    }
+    <div class="modal-action">
+      <button class="btn" type="button" (click)="closeDialog()">Cancel</button>
+      <button class="btn btn-primary" type="submit">Save</button>
+    </div>
+  </form>
+</dialog>

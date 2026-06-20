@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService } from '../../core/services/user-service';
+import { ToastService } from '../../core/services/toast-service';
 
 @Component({
   selector: 'app-nav',
@@ -10,6 +11,7 @@ import { UserService } from '../../core/services/user-service';
 })
 export class Nav implements OnInit {
   private router = inject(Router);
+  private toast = inject(ToastService);
 
   protected userService = inject(UserService);
 
@@ -26,6 +28,7 @@ export class Nav implements OnInit {
 
   handleLogout() {
     this.userService.logout();
-    // this.router.navigate(['/']);
+    this.router.navigate(['/']);
+    this.toast.success('Logged out successfully');
   }
 }

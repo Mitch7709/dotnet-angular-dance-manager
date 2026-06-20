@@ -1,22 +1,59 @@
 <header class="p-3 w-full fixed top-0 z-50 bg-linear-to-r from-primary to-black">
   <div class="flex align-middle items-center px-10 mx-auto gap-6">
     <div class="text-white">
-      <a routerLink="/" routerLinkActive="text-accent" [routerLinkActiveOptions]="{ exact: true}"
-      class="flex items-center gap-3 max-h-16 border-r-white border-r-2 pr-6">
-      <h3 class="text-2xl font-semibold uppercase">The Grove</h3>
+      <a
+        routerLink="/"
+        routerLinkActive="text-accent"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex items-center gap-3 max-h-16 border-r-white border-r-2 pr-6"
+      >
+        <h3 class="text-2xl font-semibold uppercase">The Grove</h3>
       </a>
     </div>
     <nav class="flex gap-3 my-2 uppercase text-lg text-white">
-      <a routerLink="/sessions" routerLinkActive="text-accent" class="hover:text-gray-300">Classes</a>
-      <a routerLinkActive="text-accent" class="hover:text-gray-300">Schedule</a>
-      <a routerLink="/classtypes" routerLinkActive="text-accent" class="hover:text-gray-300">Class Types</a>
-      <a routerLink="/timeslots" routerLinkActive="text-accent" class="hover:text-gray-300">Time Slots</a>
+      <div class="dropdown">
+        <div
+          tabindex="0"
+          role="button"
+          class="flex hover:text-gray-300 items-center text-white text-xl gap-3 cursor-pointer"
+        >
+          Manage
+        </div>
+        <ul
+          tabindex="-1"
+          class="menu dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow-sm"
+          (click)="handleSelectUserItem()"
+        >
+          <li>
+            <a routerLink="/sessions" class="text-black">Classes</a>
+          </li>
+          <li>
+            <a routerLink="/classtypes" class="text-black"
+              >Class Types</a
+            >
+          </li>
+          <li>
+            <a routerLink="/timeslots" class="text-black"
+              >Time Slots</a
+            >
+          </li>
+        </ul>
+      </div>
     </nav>
     <div class="flex align-middle ml-auto gap-3">
       <div class="dropdown dropdown-end">
-        <div tabindex="0" role="button" class="flex hover:text-gray-300 items-center text-white text-xl gap-3 cursor-pointer">Account</div>
-        <ul tabindex="-1" class="menu dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow-sm" 
-        (click)="handleSelectUserItem()">
+        <div
+          tabindex="0"
+          role="button"
+          class="flex hover:text-gray-300 items-center text-white text-xl gap-3 cursor-pointer"
+        >
+          Account
+        </div>
+        <ul
+          tabindex="-1"
+          class="menu dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow-sm"
+          (click)="handleSelectUserItem()"
+        >
           @if (!userService.isAuthenticated()) {
             <li>
               <a routerLink="/auth" class="btn btn-outline btn-primary">Login</a>

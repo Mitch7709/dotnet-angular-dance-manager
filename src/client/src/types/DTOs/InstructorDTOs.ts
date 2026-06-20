@@ -7,15 +7,7 @@ export type Instructor = {
      bio: string;
 }
 
-export type UpdateInstructorRequest = {
-     firstName: string;
-     lastName: string;
-     email: string;
-     phoneNumber: string;
-     bio: string;
-}
-
-export type UpdateInstructorResponse = {
+export type UpdateInstructorDTO = {
      firstName: string;
      lastName: string;
      email: string;
