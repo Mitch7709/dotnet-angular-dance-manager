@@ -28,9 +28,9 @@ namespace API.Modules
             group.MapDelete("/{id}", DeleteSession);
         }
 
-        private static async Task<Ok<IReadOnlyList<SessionResponse>>> GetSessions(SessionReadService service)
+        private static async Task<Ok<IReadOnlyList<SessionResponse>>> GetSessions(int? page, int? pageSize, SessionReadService service)
         {
-            var result = await service.GetAllAsync();
+            var result = await service.GetAllAsync(page.GetValueOrDefault(), pageSize.GetValueOrDefault());
             return TypedResults.Ok(result);
         }
 

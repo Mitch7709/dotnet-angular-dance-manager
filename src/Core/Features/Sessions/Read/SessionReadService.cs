@@ -6,11 +6,19 @@ namespace Core.Features.Sessions.Read;
 
 public class SessionReadService(IDbContext dbContext)
 {
-    public async Task<IReadOnlyList<SessionResponse>> GetAllAsync()
+    public async Task<IReadOnlyList<SessionResponse>> GetAllAsync(int page, int pageSize)
     {
+        if (page == 0)
+            page = 1;
+
+        if (pageSize == 0)
+            pageSize = 10;
+
         return await dbContext.Set<Session>()
             .AsNoTracking()
             .OrderBy(s => s.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(s => new SessionResponse(
                 s.Id,
                 s.ClassTypeId,
