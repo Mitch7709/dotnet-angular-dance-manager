@@ -1,5 +1,6 @@
 ﻿using API.Configuration;
 using Infrastructure.Identity;
+using Infrastructure.Image;
 
 namespace API.Extensions;
 
@@ -13,6 +14,10 @@ public static class ConfigurationExtensions
 
         services.AddOptions<JwtOptions>()
             .Bind(configuration.GetSection("Jwt"))
+            .ValidateDataAnnotations();
+
+        services.AddOptions<CloudinarySettings>()
+            .Bind(configuration.GetSection("Cloudinary"))
             .ValidateDataAnnotations();
 
         return services;

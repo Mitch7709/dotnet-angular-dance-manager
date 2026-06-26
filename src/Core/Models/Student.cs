@@ -11,7 +11,7 @@ public class Student : BaseEntity
     public DateOnly? DateOfBirth { get; set; }
     public WaiverStatus WaiverStatus { get; set; }
 
-    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+    public ICollection<Booking> Bookings { get; set; } = [];
 
     public int CalculateAge()
     {

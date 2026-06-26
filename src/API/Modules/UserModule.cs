@@ -31,7 +31,7 @@ public class UserModule : IModule
             : Results.Json(new { Error = result.ErrorMessage, Code = "UNAUTHORIZED_ACCESS"}, statusCode: 401);
     }
 
-    private static async Task<Results<Ok<RegisterResponse>, BadRequest<string>, UnprocessableEntity<string>>> 
+    private static async Task<Results<Ok<RegisterResponse>, BadRequest<string>, UnprocessableEntity<string>>>
         RegisterStudent(RegisterStudentRequest request, RegisterStudentUseCase useCase)
     {
         var result = await useCase.Execute(request);
@@ -45,7 +45,7 @@ public class UserModule : IModule
         };
     }
 
-    private static async Task<Results<Ok<RegisterResponse>, BadRequest<string>, UnprocessableEntity<string>>> 
+    private static async Task<Results<Ok<RegisterResponse>, BadRequest<string>, UnprocessableEntity<string>>>
         RegisterInstructor(RegisterInstructorRequest request, RegisterInstructorUseCase useCase)
     {
         var result = await useCase.Execute(request);

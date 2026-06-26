@@ -16,8 +16,7 @@ public class CreateInstructorUseCase(IDbContext dbContext)
         {
             UserId = appUser.Id,
             AppUser = appUser,
-            Bio = request.Bio,
-            ImageUrl = request.ImageUrl
+            Bio = request.Bio
         };
 
         dbContext.Set<Instructor>().Add(instructor);

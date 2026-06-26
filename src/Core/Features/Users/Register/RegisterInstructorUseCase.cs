@@ -39,7 +39,7 @@ namespace Core.Features.Users.Register
                 return Result.Failure(result.ErrorType.Value, result.ErrorMessage);
             }
 
-            var instructorRequest = new CreateInstructorRequest(user.Id, request.Bio, request.ImageUrl);
+            var instructorRequest = new CreateInstructorRequest(user.Id, request.Bio);
             await createInstructorUseCase.ExecuteAsync(instructorRequest);
 
             var token = await tokenService.GenerateToken(user);

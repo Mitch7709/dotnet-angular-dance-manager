@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Core.Models;
 
 public class Booking : BaseEntity
-{        
+{
     public int Id { get; set; }
     public int SessionId { get; set; }
     public Session Session { get; set; } = null!;

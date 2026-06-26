@@ -8,7 +8,8 @@ public enum ErrorType
     ValidationError,
     ImportError,
     DataError,
-    Conflict
+    Conflict,
+    PhotoUploadError
 }
 
 public class Result

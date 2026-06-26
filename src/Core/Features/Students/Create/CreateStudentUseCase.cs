@@ -1,4 +1,5 @@
 using System;
+using Core.Features.Users;
 using Core.Models;
 using Core.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,13 @@ public class CreateStudentUseCase(IDbContext dbContext)
     {
         var appUser = await dbContext.Set<AppUser>()
             .SingleAsync(u => u.Id == request.AppUserId);
-        
+
+
         var student = new Student
         {
             UserId = appUser.Id,
             AppUser = appUser,
             DateOfBirth = request.DateOfBirth,
-            ImageUrl = request.ImageUrl,
             WaiverStatus = WaiverStatus.NotSigned
         };
 

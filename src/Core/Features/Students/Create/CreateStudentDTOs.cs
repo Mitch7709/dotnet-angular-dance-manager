@@ -4,9 +4,8 @@ namespace Core.Features.Students.Create;
 
 public record CreateStudentRequest(
     string AppUserId,
-    DateOnly? DateOfBirth,
-    string? ImageUrl
-);
+    DateOnly? DateOfBirth
+    );
 
 public record CreateStudentResponse(
     int Id,

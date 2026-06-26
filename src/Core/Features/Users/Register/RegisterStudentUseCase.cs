@@ -34,7 +34,7 @@ public class RegisterStudentUseCase(
 
         var dateOfBirth = DateOnly.ParseExact(request.DateOfBirth, "yyyy-MM-dd", null);
 
-        var studentRequest = new CreateStudentRequest(user.Id, dateOfBirth, request.ImageUrl);
+        var studentRequest = new CreateStudentRequest(user.Id, dateOfBirth);
         await createStudentUseCase.ExecuteAsync(studentRequest);
 
         var token = await tokenService.GenerateToken(user);

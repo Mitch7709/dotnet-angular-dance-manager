@@ -44,7 +44,7 @@ public class CreateSessionUseCase(IDbContext dbContext)
 
         if (isTimeSlotOccupied)
         {
-            return Result.Failure(ErrorType.ValidationError, $"A different session already occupies the provided TimeSlot.");
+            return Result.Failure(ErrorType.ValidationError, "A different session already occupies the provided TimeSlot.");
         }
 
         var session = new Session

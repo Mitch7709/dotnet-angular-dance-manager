@@ -52,11 +52,6 @@ public class TimeSlotReadService(IDbContext dbContext)
             ))
             .FirstOrDefaultAsync();
 
-        if (timeSlot is null)
-        {
-            return Result.Failure(ErrorType.NotFound, $"TimeSlot with id {id} not found.");
-        }
-
-        return timeSlot;
+        return timeSlot ?? (Result<TimeSlotResponse>)Result.Failure(ErrorType.NotFound, $"TimeSlot with id {id} not found.");
     }
 }

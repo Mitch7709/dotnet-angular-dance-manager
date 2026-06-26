@@ -5,9 +5,8 @@ namespace Core.Features.Instructors.Create;
 
 public record CreateInstructorRequest(
     string AppUserId,
-    string? Bio,
-    string? ImageUrl
-);
+    string? Bio
+    );
 
 public record CreateInstructorResponse(
     int Id,

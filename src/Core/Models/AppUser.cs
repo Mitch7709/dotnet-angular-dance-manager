@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 namespace Core.Models;
 
 public class AppUser : IdentityUser, IEntity
-{        
+{
 
 
     public AppUser(string email, string firstName, string lastName, string phoneNumber)

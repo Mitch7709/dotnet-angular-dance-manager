@@ -1,6 +1,7 @@
 using API.Configuration;
 using API.Extensions;
 using Infrastructure.Database;
+using Infrastructure.Image;
 using Microsoft.EntityFrameworkCore;
 
 namespace API;
@@ -14,6 +15,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddEndpointsApiExplorer()
                         .AddOpenApi()
+                        .AddAntiforgery()
                         .ConfigureHttpJsonOptions(options =>
                         {
                             options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
@@ -23,6 +25,7 @@ public class Program
                         .AddDatabase()
                         .AddSecurity(builder.Configuration)
                         .AddDepedencyInjection();
+                        // .Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 
         var app = builder.Build();
 
@@ -40,6 +43,7 @@ public class Program
             .UseCors(Security.CorsPolicy)
             .UseAuthentication()
             .UseAuthorization()
+            .UseAntiforgery()
             .UseDatabase()
             .UseMinimalApiEndpoints();
 

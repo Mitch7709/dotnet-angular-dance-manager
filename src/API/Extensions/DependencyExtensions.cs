@@ -30,6 +30,8 @@ using Core.Shared;
 using FluentValidation;
 using Infrastructure.Database;
 using Infrastructure.Identity;
+using Infrastructure.Image;
+using Core.Features.Photos.AddPhoto;
 
 namespace API.Extensions;
 
@@ -37,7 +39,7 @@ public static class DependencyExtensions
 {
     public static IServiceCollection AddDepedencyInjection(this IServiceCollection services)
     {
-        services.AddScoped<IDbContext, AppDbContext>();        
+        services.AddScoped<IDbContext, AppDbContext>();
 
         services.AddTransient<CreateStudentUseCase>();
         services.AddTransient<UpdateStudentUseCase>();
@@ -87,8 +89,11 @@ public static class DependencyExtensions
 
         services.AddTransient<LoginUseCase>();
         services.AddValidatorsFromAssemblyContaining<LoginValidator>();
-        
+
+        services.AddTransient<AddPhotoToStudentUseCase>();
+
         services.AddTransient<ITokenService, TokenService>();
+        services.AddTransient<IPhotoService, PhotoService>();
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IUserContext, UserContext>();
 

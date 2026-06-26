@@ -62,7 +62,7 @@ public class BookingReadService(IDbContext dbContext, IUserContext userContext)
 
         if (studentId == 0)
         {
-            return Result.Failure(ErrorType.NotFound, $"Student not found.");
+            return Result.Failure(ErrorType.NotFound, "Student not found.");
         }
 
         var bookings = await dbContext.Set<Booking>()

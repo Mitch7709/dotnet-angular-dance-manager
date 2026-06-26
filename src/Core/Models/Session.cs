@@ -20,7 +20,7 @@ public class Session : BaseEntity
     public DateOnly SessionDate { get; set; }
     public SessionStatus Status { get; set; }
 
-    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+    public ICollection<Booking> Bookings { get; set; } = [];
 
     public DateOnly FindClosestDateFromTimeSlot()
     {

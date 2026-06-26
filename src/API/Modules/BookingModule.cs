@@ -47,7 +47,7 @@ public class BookingModule : IModule
             : TypedResults.NotFound(result.ErrorMessage);
     }
 
-    private static async Task<Results<Ok<IReadOnlyList<BookingResponse>>, NotFound<string>>> 
+    private static async Task<Results<Ok<IReadOnlyList<BookingResponse>>, NotFound<string>>>
         GetStudentBookings(BookingReadService service)
     {
         var result = await service.GetBookingsForStudent();
