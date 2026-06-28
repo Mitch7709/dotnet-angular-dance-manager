@@ -1,4 +1,5 @@
 ﻿using Core.Features.Photos.AddPhoto;
+using Core.Features.Photos.UpdatePhoto;
 using Core.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,22 @@ namespace API.Modules
                 .DisableAntiforgery();
 
             group.MapPost("/student/{userId}", AddPhotoToStudent);
+            group.MapPut("/student/{userId}", UpdateStudentPhoto);
         }
         private static async Task<Results<Ok<string>, NotFound<string>, UnprocessableEntity<string>>>
-            AddPhotoToStudent(int userId, [FromForm]IFormFile imageFile, AddPhotoToStudentUseCase useCase)
+            AddPhotoToStudent(string userId, [FromForm]IFormFile imageFile, AddPhotoToStudentUseCase useCase)
+        {
+            var result = await useCase.ExecuteAsync(userId, imageFile);
+            return result switch
+            {
+                { IsSuccess: true } => TypedResults.Ok(result.Value),
+                { IsFailure: true, ErrorType: ErrorType.NotFound } => TypedResults.NotFound(result.ErrorMessage),
+                { IsFailure: true, ErrorType: ErrorType.PhotoUploadError } => TypedResults.UnprocessableEntity(result.ErrorMessage),
+                _ => throw new NotImplementedException()
+            };
+        }
+        private static async Task<Results<Ok<string>, NotFound<string>, UnprocessableEntity<string>>>
+            UpdateStudentPhoto(string userId, [FromForm]IFormFile imageFile, UpdateStudentPhotoUseCase useCase)
         {
             var result = await useCase.ExecuteAsync(userId, imageFile);
             return result switch

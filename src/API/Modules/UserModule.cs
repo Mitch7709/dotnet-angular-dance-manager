@@ -24,7 +24,7 @@ public class UserModule : IModule
 
     private static async Task<IResult> Login(LoginRequest request, LoginUseCase useCase)
     {
-        var result = await useCase.Execute(request);
+        Result<LoginResponse>? result = await useCase.Execute(request);
 
         return result.IsSuccess
             ? TypedResults.Ok(result.Value)

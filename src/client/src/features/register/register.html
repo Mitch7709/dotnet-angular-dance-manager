@@ -1,4 +1,166 @@
-<section class="bg-gray-50 dark:bg-base-200">
+<div class="min-h-screen flex items-center justify-center p-6">
+  <div class="card bg-base-100 shadow-2xl w-full max-w-7xl">
+    <div class="grid lg:grid-cols-2">
+      <!-- Registration -->
+      <div class="p-10">
+        <img
+          src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+          class="h-20 mb-8"
+          alt="The Grove"
+        />
+
+        <h1 class="text-3xl font-bold">Create Your Account</h1>
+
+        <p class="text-base-content/70 mt-4 mb-8">
+          Join the dance community and connect with dancers near you.
+        </p>
+
+        <form [formGroup]="registerForm" (ngSubmit)="register()" class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-4">
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text">First Name</span>
+              </div>
+
+              <input type="text" class="input input-bordered w-full" formControlName="firstName" />
+            </label>
+
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text">Last Name</span>
+              </div>
+
+              <input type="text" class="input input-bordered w-full" formControlName="lastName" />
+            </label>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <label class="form-control">
+              <label class="form-control">
+              <div class="label">
+                <span class="label-text"> Phone Number </span>
+              </div>
+
+              <input type="text" class="input input-bordered w-full" formControlName="phoneNumber" />
+            </label>
+            </label>
+
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text"> Date of Birth </span>
+              </div>
+
+              <input type="date" class="input input-bordered w-full" formControlName="dateOfBirth" />
+            </label>
+          </div>
+
+          <div class="grid grid-cols-1">
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text"> Email Address </span>
+              </div>
+
+              <input type="email" class="input input-bordered w-full" formControlName="email" />
+            </label>
+          </div>
+
+          <div class="grid grid-cols-1">
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text"> Password </span>
+              </div>
+
+              <input
+                type="password"
+                class="input input-bordered w-full"
+                formControlName="password"
+              />
+            </label>
+          </div>
+
+          <!-- Submit -->
+
+          <button class="btn btn-primary btn-lg w-full" type="submit">Create Account</button>
+
+          <div class="divider">OR</div>
+
+          <p class="text-center">
+            Already have an account?
+
+            <a routerLink="/login" class="link link-primary font-semibold"> Sign In </a>
+          </p>
+        </form>
+      </div>
+
+      <!-- Photo Upload -->
+
+      <div class="border-l border-base-300 p-10 flex flex-col justify-start">
+        <h2 class="text-3xl font-semibold">
+          Profile Photo
+
+          <span class="text-base-content/50 text-lg"> (Optional) </span>
+        </h2>
+
+        <p class="mt-2 text-base-content/70">Add a profile photo to help others recognize you.</p>
+
+        <!-- Preview -->
+
+        <div class="mt-10 flex justify-center">
+          <div class="avatar">
+            <div class="w-64 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+              @if (photoPreview) {
+                <img [src]="photoPreview" alt="Profile Photo Preview" />
+              }
+              @else {
+                <img src="/assets/avatar-placeholder.png" />
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload -->
+
+        <div class="mt-8">
+          <input
+            hidden
+            #fileInput
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            (change)="onPhotoSelected($event)"
+          />
+
+          <button
+            type="button"
+            class="btn btn-outline btn-primary w-full"
+            (click)="fileInput.click()"
+          >
+            Choose Photo
+          </button>
+
+          <p class="text-center text-sm mt-4 opacity-70">JPG, PNG or WEBP • Max 5 MB</p>
+        </div>
+
+        <!-- Benefits -->
+
+        <div class="card bg-base-200 mt-12">
+          <div class="card-body">
+            <h3 class="card-title">Why add a photo?</h3>
+
+            <ul class="space-y-3 mt-2">
+              <li>✔ Build your personal brand</li>
+
+              <li>✔ Connect with other dancers</li>
+
+              <li>✔ Stand out in the community</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <section class="bg-gray-50 dark:bg-base-200">
   <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
     <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-black">
       <img
@@ -116,4 +278,4 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->

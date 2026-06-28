@@ -16,8 +16,8 @@ public static class ApiEndpointsExtension
 
         foreach (var type in moduleTypes)
         {
-            var module = Activator.CreateInstance(type) as IModule;
-            var group = webApp.MapGroup("/api");
+            IModule? module = Activator.CreateInstance(type) as IModule;
+            RouteGroupBuilder? group = webApp.MapGroup("/api");
             module?.MapEndpoints(group);
         }
 

@@ -1,4 +1,8 @@
 ﻿using API.Shared;
+using Core.Features.Bookings.Create;
+using Core.Features.Bookings.Delete;
+using Core.Features.Bookings.Read;
+using Core.Features.Bookings.Update;
 using Core.Features.ClassTypes.Create;
 using Core.Features.ClassTypes.Delete;
 using Core.Features.ClassTypes.Read;
@@ -7,10 +11,8 @@ using Core.Features.Instructors.Create;
 using Core.Features.Instructors.Delete;
 using Core.Features.Instructors.Read;
 using Core.Features.Instructors.Update;
-using Core.Features.Bookings.Create;
-using Core.Features.Bookings.Delete;
-using Core.Features.Bookings.Read;
-using Core.Features.Bookings.Update;
+using Core.Features.Photos.AddPhoto;
+using Core.Features.Photos.UpdatePhoto;
 using Core.Features.Sessions.Create;
 using Core.Features.Sessions.Delete;
 using Core.Features.Sessions.Read;
@@ -31,7 +33,6 @@ using FluentValidation;
 using Infrastructure.Database;
 using Infrastructure.Identity;
 using Infrastructure.Image;
-using Core.Features.Photos.AddPhoto;
 
 namespace API.Extensions;
 
@@ -91,6 +92,7 @@ public static class DependencyExtensions
         services.AddValidatorsFromAssemblyContaining<LoginValidator>();
 
         services.AddTransient<AddPhotoToStudentUseCase>();
+        services.AddTransient<UpdateStudentPhotoUseCase>();
 
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IPhotoService, PhotoService>();

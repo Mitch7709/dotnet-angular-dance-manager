@@ -1,8 +1,8 @@
-﻿using CloudinaryDotNet.Actions;
-using Core.Features.Users;
+﻿using Core.Features.Users;
 using Core.Models;
 using Core.Shared;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Features.Photos.AddPhoto
 {
@@ -10,9 +10,9 @@ namespace Core.Features.Photos.AddPhoto
         IPhotoService photoService,
         IDbContext dbContext)
     {
-        public async Task<Result<string>> ExecuteAsync(int userId, IFormFile imageFile)
+        public async Task<Result<string>> ExecuteAsync(string userId, IFormFile imageFile)
         {
-            var existingStudent = await dbContext.Set<Student>().FindAsync(userId);
+            var existingStudent = await dbContext.Set<Student>().FirstOrDefaultAsync(s => s.UserId == userId);
 
             if (existingStudent == null)
             {

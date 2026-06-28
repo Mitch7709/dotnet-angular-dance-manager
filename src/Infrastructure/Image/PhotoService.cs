@@ -38,10 +38,31 @@ public class PhotoService : IPhotoService
         return uploadResult;
     }
 
-    public async Task<DeletionResult> DeletePhotoAsync(string publicId)
+    public async Task<ImageUploadResult> UpdatePhotoAsync(string publicId, IFormFile file)
     {
-        var deleteParams = new DeletionParams(publicId);
-        var result = await _cloudinary.DestroyAsync(deleteParams);
-        return result;
+        var uploadResult = new ImageUploadResult();
+        if (file.Length > 0)
+        {
+            await using var stream = file.OpenReadStream();
+            var uploadParams = new ImageUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face"),
+                Folder = "TheGrove",
+                PublicId = publicId,
+                Overwrite = true,
+                Invalidate = true
+            };
+
+            uploadResult = await _cloudinary.UploadAsync(uploadParams);
+        }
+        return uploadResult;
     }
+
+    // public async Task<DeletionResult> DeletePhotoAsync(string publicId)
+    // {
+    //     var deleteParams = new DeletionParams(publicId);
+    //     var result = await _cloudinary.DestroyAsync(deleteParams);
+    //     return result;
+    // }
 }
