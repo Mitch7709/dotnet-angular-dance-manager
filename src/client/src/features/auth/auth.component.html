@@ -1,12 +1,5 @@
-<!-- <div class="tabs tabs-border w-full justify-center">
-  <input type="radio" name="auth_tabs" class="tab" aria-label="Login" />
-  <div class="tab-content p-6 w-full">
-    <app-login class="block w-full"></app-login>
-  </div>
-
-  <input type="radio" name="auth_tabs" class="tab" aria-label="Register" checked />
-  <div class="tab-content p-6 w-full">
-    <app-register class="block w-full"></app-register>
-  </div>
-</div> -->
-<app-register class="block w-full"></app-register>
+@if (isRegisterMode) {
+<app-register (toggleMode)="toggleRegisterMode()" class="block w-full"></app-register>
+} @else {
+  <app-login class="block w-full"></app-login>
+}

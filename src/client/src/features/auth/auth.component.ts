@@ -10,5 +10,9 @@ import { Login } from '../login/login';
   styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent {
-  
+  protected isRegisterMode: boolean = true;
+
+  toggleRegisterMode() {
+    this.isRegisterMode = !this.isRegisterMode;
+  }
 }

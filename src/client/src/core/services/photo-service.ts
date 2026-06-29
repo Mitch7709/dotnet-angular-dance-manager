@@ -9,7 +9,7 @@ export class PhotoService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl + '/photos';
 
-  uploadStudentPhoto(id: number, file: File) {
+  uploadStudentPhoto(id: string, file: File) {
     const formData = new FormData();
     formData.append('imageFile', file);
     return this.http.post(`${this.baseUrl}/student/${id}`, formData);

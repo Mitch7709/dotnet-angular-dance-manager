@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Output } from '@angular/core';
 import { UserService } from '../../core/services/user-service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
@@ -25,6 +25,8 @@ export class Register {
   private toastService = inject(ToastService);
   protected cdr = inject(ChangeDetectorRef);
 
+  @Output() toggleMode = new EventEmitter<void>();
+
   constructor() {
     this.registerForm = this.fb.group({
       email: [''],
@@ -34,6 +36,7 @@ export class Register {
       phoneNumber: [''],
       dateOfBirth: [''],
       bio: [''],
+      photo: [null],
     });
   }
 
@@ -52,42 +55,43 @@ export class Register {
       password: formData.password,
       firstName: formData.firstName,
       lastName: formData.lastName,
-        phoneNumber: formData.phoneNumber,
-        dateOfBirth: formData.dateOfBirth,
-      };
+      phoneNumber: formData.phoneNumber,
+      dateOfBirth: formData.dateOfBirth,
+    };
 
-      this.userService.registerStudent(studentCreds).subscribe({
-        next: (response) => {
-          this.toastService.success('Student registration successful');
-          const photoFile = this.registerForm.get('photo')?.value;
-          if (photoFile) {
-            this.photoService.uploadStudentPhoto(response.userId, photoFile).subscribe({
-              next: () => {
-                this.toastService.success('Photo uploaded successfully');
-              },
-              error: (error: HttpErrorResponse) => {
-                this.toastService.error(getErrorMessage(error, 'Photo upload failed.'));
-              },
-            });
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400 && error.error?.errors) {
-            // Validation errors from EndpointValidationFilter
-            const validationErrors: Record<string, string[]> = error.error.errors;
+    this.userService.registerStudent(studentCreds).subscribe({
+      next: (response) => {
+        this.toastService.success('Student registration successful');
+        const photoFile = this.registerForm.get('photo')?.value;
+        if (photoFile) {
+          this.photoService.uploadStudentPhoto(response.userId, photoFile).subscribe({
+            next: () => {
+              this.toastService.success('Photo uploaded successfully');
+            },
+            error: (error: HttpErrorResponse) => {
+              this.toastService.error(getErrorMessage(error, 'Student registration succeeded, but photo upload failed.'));
+            },
+          });
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400 && error.error?.errors) {
+          // Validation errors from EndpointValidationFilter
+          const validationErrors: Record<string, string[]> = error.error.errors;
 
-            this.displayValidationErrors(validationErrors);
-          } else {
-            this.toastService.error(getErrorMessage(error, 'Student registration failed.'));
-          }
-        },
-      });
+          this.displayValidationErrors(validationErrors);
+        } else {
+          this.toastService.error(getErrorMessage(error, 'Student registration failed.'));
+        }
+      },
+    });
   }
 
   onPhotoSelected(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
       const file = target.files[0];
+      this.registerForm.patchValue({ photo: file });
       const reader = new FileReader();
       reader.onload = () => {
         this.photoPreview = reader.result;
@@ -114,5 +118,9 @@ export class Register {
     if (control) {
       control.setErrors(null);
     }
+  }
+
+  switchToLogin() {
+    this.toggleMode.emit();
   }
 }
