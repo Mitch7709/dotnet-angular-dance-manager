@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Home } from '../features/home/home';
-import { AuthComponent } from '../features/auth/auth.component';
+import { AuthComponent } from '../features/Auth-components/auth/auth.component';
 import { Timeslot } from '../features/timeslot/timeslot';
 import { Classtype } from '../features/classtype/classtype';
 import { roleGuard } from '../core/guards/role-guard';
@@ -26,5 +26,5 @@ export const routes: Routes = [
     component: Session,
     canActivate: [roleGuard],
     data: { roles: ['Instructor', 'Admin'] },
-  }
+  },
 ];

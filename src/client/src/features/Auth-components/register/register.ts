@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, EventEmitter, inject, Output } from '@angular/core';
-import { UserService } from '../../core/services/user-service';
+import { UserService } from '../../../core/services/user-service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { take } from 'rxjs/internal/operators/take';
-import { ToastService } from '../../core/services/toast-service';
-import { getErrorMessage } from '../../core/utils/error-handler';
-import { PhotoService } from '../../core/services/photo-service';
+import { ToastService } from '../../../core/services/toast-service';
+import { getErrorMessage } from '../../../core/utils/error-handler';
+import { PhotoService } from '../../../core/services/photo-service';
 
 @Component({
   selector: 'app-register',
@@ -61,15 +61,17 @@ export class Register {
 
     this.userService.registerStudent(studentCreds).subscribe({
       next: (response) => {
-        this.toastService.success('Student registration successful');
+        // this.toastService.success('Student registration successful');
         const photoFile = this.registerForm.get('photo')?.value;
         if (photoFile) {
           this.photoService.uploadStudentPhoto(response.userId, photoFile).subscribe({
             next: () => {
-              this.toastService.success('Photo uploaded successfully');
+              this.toastService.success('Student registration successful');
             },
             error: (error: HttpErrorResponse) => {
-              this.toastService.error(getErrorMessage(error, 'Student registration succeeded, but photo upload failed.'));
+              this.toastService.error(
+                getErrorMessage(error, 'Student registration succeeded, but photo upload failed.'),
+              );
             },
           });
         }

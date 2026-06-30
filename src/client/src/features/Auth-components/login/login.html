@@ -1,0 +1,200 @@
+<div class="min-h-screen bg-base-200 flex items-center justify-center p-6">
+  <div class="card bg-base-100 shadow-2xl w-full max-w-7xl">
+    <div class="grid lg:grid-cols-2">
+      <div class="p-10">
+        <img
+          src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+          alt="The Grove"
+          class="h-20 mb-8"
+        />
+        <h1 class="text-5xl font-bold">Welcome Back</h1>
+        <p class="mt-4 text-base-content/70 mb-10">
+          Log in to your account and continue your dance journey.
+        </p>
+
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-6">
+          <div class="grid grid-cols-1">
+            <div class="mb-3">
+              <label class="form-control">
+                <div class="label">
+                  <span class="label-text"> Email Address </span>
+                </div>
+
+                <input
+                  type="email"
+                  class="input input-bordered w-full"
+                  formControlName="email"
+                  placeholder="you@example.com"
+                />
+              </label>
+            </div>
+
+            <div>
+              <label class="form-control">
+                <div class="label">
+                  <span class="label-text"> Password </span>
+                </div>
+
+                <input
+                  type="password"
+                  class="input input-bordered w-full"
+                  formControlName="password"
+                  placeholder="Enter your password"
+                />
+              </label>
+            </div>
+          </div>
+
+          <!-- Remember Me -->
+
+          <div class="flex justify-end">
+            <!-- <label class="label cursor-pointer gap-3">
+              <input
+                type="checkbox"
+                class="checkbox checkbox-primary"
+                formControlName="rememberMe"
+              />
+
+              <span class="label-text"> Remember me </span>
+            </label> -->
+
+            <a routerLink="/forgot-password" class="link link-primary"> Forgot your password? </a>
+          </div>
+
+          <button class="btn btn-primary btn-lg w-full" type="submit">
+            Log In
+          </button>
+
+          <div class="divider">OR</div>
+
+          <!-- Future Social Login -->
+
+          <button type="button" class="btn btn-outline w-full">Continue with Google</button>
+
+          <div class="text-center">
+            Don't have an account?
+
+            <a (click)="switchToRegister()" class="link link-primary font-semibold"> Sign Up </a>
+          </div>
+        </form>
+      </div>
+
+      <!-- ===================== -->
+      <!-- Right Side -->
+      <!-- ===================== -->
+
+      <div class="border-l border-base-300 bg-base-200/40">
+        <div class="h-full flex flex-col justify-center items-center p-10">
+          <h2 class="text-4xl font-bold text-primary text-center">Welcome to The Grove</h2>
+
+          <p class="text-center text-base-content/70 mt-4 max-w-md">
+            Connect with dancers, discover local events, share your passion, and grow together.
+          </p>
+
+          <!-- Illustration -->
+
+          <div class="my-12">
+            <div class="avatar">
+              <div class="w-72 rounded-full ring ring-primary ring-offset-base-100 ring-offset-4">
+                <img src="/assets/login-hero.png" alt="Dance Illustration" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Card -->
+
+          <div class="card bg-base-100 shadow-md w-full max-w-lg">
+            <div class="card-body">
+              <h3 class="card-title">Why Join?</h3>
+
+              <div class="space-y-5 mt-3">
+                <div class="flex gap-4">
+                  <div class="text-primary text-2xl">👥</div>
+
+                  <div>
+                    <div class="font-semibold">Find Your People</div>
+
+                    <div class="text-sm opacity-70">
+                      Meet dancers near you and build your community.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex gap-4">
+                  <div class="text-primary text-2xl">📅</div>
+
+                  <div>
+                    <div class="font-semibold">Discover Events</div>
+
+                    <div class="text-sm opacity-70">
+                      Browse socials, workshops and dance nights.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex gap-4">
+                  <div class="text-primary text-2xl">⭐</div>
+
+                  <div>
+                    <div class="font-semibold">Share Your Passion</div>
+
+                    <div class="text-sm opacity-70">
+                      Post photos, meet instructors and inspire others.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <section class="bg-gray-50 dark:bg-base-200">
+  <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+    <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-black">
+      <img
+        class="w-8 h-8 mr-2"
+        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+        alt="logo"
+      />
+      The Grove
+    </a>
+    <div class="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 dark:bg-orange-200">
+      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <h1
+          class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-gray-900"
+        >
+          Login to your account
+        </h1>
+        <form [formGroup]="credentialsForm" class="space-y-4 md:space-y-6" (ngSubmit)="login()">
+          <div>
+            <app-text-input
+              [label]="'Email'"
+              [placeholder]="'Email'"
+              [required]="true"
+              formControlName="email"
+            />
+          </div>
+          <div>
+            <app-text-input
+              [label]="'Password'"
+              [type]="'password'"
+              [placeholder]="'Password'"
+              [required]="true"
+              formControlName="password"
+            />
+          </div>
+
+          <div class="flex items-end">
+            <button type="submit" class="btn btn-primary justify-center">
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section> -->

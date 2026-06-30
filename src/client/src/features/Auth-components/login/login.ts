@@ -1,15 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TextInput } from '../../shared/text-input/text-input';
-import { UserService } from '../../core/services/user-service';
+import { UserService } from '../../../core/services/user-service';
 import { take } from 'rxjs';
-import { ToastService } from '../../core/services/toast-service';
+import { ToastService } from '../../../core/services/toast-service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [TextInput, ReactiveFormsModule],
+  imports: [ ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
@@ -18,17 +17,19 @@ export class Login {
   private toast = inject(ToastService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  protected credentialsForm: FormGroup;
+  protected loginForm: FormGroup;
+
+  @Output() toggleMode = new EventEmitter<void>();
 
   constructor() {
-    this.credentialsForm = this.fb.group({
+    this.loginForm = this.fb.group({
       email: [''],
       password: [''],
     });
   }
 
   login() {
-    const formData = this.credentialsForm.value;
+    const formData = this.loginForm.value;
 
     const loginCreds = {
       email: formData.email,
@@ -46,7 +47,7 @@ export class Login {
           // Validation errors from EndpointValidationFilter
           const validationErrors: Record<string, string[]> = error.error.errors;
           Object.entries(validationErrors).forEach(([field, messages]) => {
-            const control = this.credentialsForm.get(field.toLowerCase());
+            const control = this.loginForm.get(field.toLowerCase());
             control?.setErrors({ server: messages[0] });
             control?.markAsTouched();
             // auto-clear on edit:
@@ -57,5 +58,9 @@ export class Login {
         }
       },
     });
+  }
+
+  switchToRegister() {
+    this.toggleMode.emit();
   }
 }

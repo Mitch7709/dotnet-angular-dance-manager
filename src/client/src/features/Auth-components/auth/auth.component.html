@@ -1,5 +1,5 @@
 @if (isRegisterMode) {
 <app-register (toggleMode)="toggleRegisterMode()" class="block w-full"></app-register>
 } @else {
-  <app-login class="block w-full"></app-login>
+  <app-login (toggleMode)="toggleRegisterMode()" class="block w-full"></app-login>
 }

@@ -17,44 +17,60 @@
 
         <form [formGroup]="registerForm" (ngSubmit)="register()" class="space-y-6">
           <div class="grid md:grid-cols-2 gap-4">
-            <label class="form-control">
-              <div class="label">
-                <span class="label-text">First Name</span>
-              </div>
-
-              <input type="text" class="input input-bordered w-full" formControlName="firstName" />
-            </label>
-
-            <label class="form-control">
-              <div class="label">
-                <span class="label-text">Last Name</span>
-              </div>
-
-              <input type="text" class="input input-bordered w-full" formControlName="lastName" />
-            </label>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <label class="form-control">
+            <div>
               <label class="form-control">
-              <div class="label">
-                <span class="label-text"> Phone Number </span>
-              </div>
+                <div class="label">
+                  <span class="label-text">First Name</span>
+                </div>
 
-              <input type="text" class="input input-bordered w-full" formControlName="phoneNumber" />
-            </label>
-            </label>
+                <input
+                  type="text"
+                  class="input input-bordered w-full"
+                  formControlName="firstName"
+                />
+              </label>
+            </div>
+            <div>
+              <label class="form-control">
+                <div class="label">
+                  <span class="label-text">Last Name</span>
+                </div>
 
-            <label class="form-control">
-              <div class="label">
-                <span class="label-text"> Date of Birth </span>
-              </div>
+                <input type="text" class="input input-bordered w-full" formControlName="lastName" />
+              </label>
+            </div>
 
-              <input type="date" class="input input-bordered w-full" formControlName="dateOfBirth" />
-            </label>
+            <div>
+              <label class="form-control">
+                <label class="form-control">
+                  <div class="label">
+                    <span class="label-text"> Phone Number </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    class="input input-bordered w-full"
+                    formControlName="phoneNumber"
+                  />
+                </label>
+              </label>
+            </div>
+            <div>
+              <label class="form-control">
+                <div class="label">
+                  <span class="label-text"> Date of Birth </span>
+                </div>
+
+                <input
+                  type="date"
+                  class="input input-bordered w-full"
+                  formControlName="dateOfBirth"
+                />
+              </label>
+            </div>
           </div>
 
-          <div class="grid grid-cols-1">
+          <div class="col-span-2">
             <label class="form-control">
               <div class="label">
                 <span class="label-text"> Email Address </span>
@@ -64,7 +80,7 @@
             </label>
           </div>
 
-          <div class="grid grid-cols-1">
+          <div class="col-span-2">
             <label class="form-control">
               <div class="label">
                 <span class="label-text"> Password </span>
@@ -78,8 +94,6 @@
             </label>
           </div>
 
-          <!-- Submit -->
-
           <button class="btn btn-primary btn-lg w-full" type="submit">Create Account</button>
 
           <div class="divider">OR</div>
@@ -87,7 +101,9 @@
           <p class="text-center">
             Already have an account?
 
-            <a (click)="switchToLogin()" class="link link-primary font-semibold cursor-pointer"> Sign In </a>
+            <a (click)="switchToLogin()" class="link link-primary font-semibold cursor-pointer">
+              Sign In
+            </a>
           </p>
         </form>
       </div>
@@ -110,8 +126,7 @@
             <div class="w-64 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
               @if (photoPreview) {
                 <img [src]="photoPreview" alt="Profile Photo Preview" />
-              }
-              @else {
+              } @else {
                 <img src="/assets/avatar-placeholder.png" />
               }
             </div>
