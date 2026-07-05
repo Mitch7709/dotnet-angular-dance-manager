@@ -5,6 +5,7 @@ import { Timeslot } from '../features/timeslot/timeslot';
 import { Classtype } from '../features/classtype/classtype';
 import { roleGuard } from '../core/guards/role-guard';
 import { Session } from '../features/session/session';
+import { Booking } from '../features/booking/booking';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -27,4 +28,9 @@ export const routes: Routes = [
     canActivate: [roleGuard],
     data: { roles: ['Instructor', 'Admin'] },
   },
+  {
+    path: 'bookings',
+    component: Booking,
+    canActivate: [roleGuard]
+  }
 ];

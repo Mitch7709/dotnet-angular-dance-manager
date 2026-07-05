@@ -1,5 +1,6 @@
 ﻿using API.Shared;
 using Core.Features.Bookings.Create;
+using Core.Features.Bookings.Create.CreateForUser;
 using Core.Features.Bookings.Delete;
 using Core.Features.Bookings.Read;
 using Core.Features.Bookings.Update;
@@ -76,6 +77,7 @@ public static class DependencyExtensions
         services.AddValidatorsFromAssemblyContaining<CreateSessionValidator>();
 
         services.AddTransient<CreateBookingUseCase>();
+        services.AddTransient<CreateBookingForUserUseCase>();
         services.AddTransient<UpdateBookingUseCase>();
         services.AddTransient<BookingReadService>();
         services.AddTransient<DeleteBookingUseCase>();
