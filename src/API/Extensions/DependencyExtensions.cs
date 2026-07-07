@@ -93,8 +93,8 @@ public static class DependencyExtensions
         services.AddTransient<LoginUseCase>();
         services.AddValidatorsFromAssemblyContaining<LoginValidator>();
 
-        services.AddTransient<AddPhotoToStudentUseCase>();
-        services.AddTransient<UpdateStudentPhotoUseCase>();
+        services.AddTransient<AddPhotoToUserUseCase>();
+        services.AddTransient<UpdateUserPhotoUseCase>();
 
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IPhotoService, PhotoService>();

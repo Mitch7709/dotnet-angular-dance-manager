@@ -15,13 +15,13 @@ namespace API.Modules
                 .RequireAuthorization()
                 .DisableAntiforgery();
 
-            group.MapPost("/student/{userId}", AddPhotoToStudent);
-            group.MapPut("/student/{userId}", UpdateStudentPhoto);
+            group.MapPost("", AddPhotoToUser);
+            group.MapPut("", UpdateUserPhoto);
         }
         private static async Task<Results<Ok<string>, NotFound<string>, UnprocessableEntity<string>>>
-            AddPhotoToStudent(string userId, [FromForm]IFormFile imageFile, AddPhotoToStudentUseCase useCase)
+            AddPhotoToUser([FromForm]IFormFile imageFile, AddPhotoToUserUseCase useCase)
         {
-            var result = await useCase.ExecuteAsync(userId, imageFile);
+            var result = await useCase.ExecuteAsync(imageFile);
             return result switch
             {
                 { IsSuccess: true } => TypedResults.Ok(result.Value),
@@ -31,9 +31,9 @@ namespace API.Modules
             };
         }
         private static async Task<Results<Ok<string>, NotFound<string>, UnprocessableEntity<string>>>
-            UpdateStudentPhoto(string userId, [FromForm]IFormFile imageFile, UpdateStudentPhotoUseCase useCase)
+            UpdateUserPhoto([FromForm]IFormFile imageFile, UpdateUserPhotoUseCase useCase)
         {
-            var result = await useCase.ExecuteAsync(userId, imageFile);
+            var result = await useCase.ExecuteAsync(imageFile);
             return result switch
             {
                 { IsSuccess: true } => TypedResults.Ok(result.Value),

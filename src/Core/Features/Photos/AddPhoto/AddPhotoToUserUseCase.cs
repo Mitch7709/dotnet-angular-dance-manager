@@ -6,17 +6,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Features.Photos.AddPhoto
 {
-    public class AddPhotoToStudentUseCase(
+    public class AddPhotoToUserUseCase(
         IPhotoService photoService,
+        IUserContext userContext, 
         IDbContext dbContext)
     {
-        public async Task<Result<string>> ExecuteAsync(string userId, IFormFile imageFile)
+        public async Task<Result<string>> ExecuteAsync(IFormFile imageFile)
         {
-            var existingStudent = await dbContext.Set<Student>().FirstOrDefaultAsync(s => s.UserId == userId);
+            var userId = userContext.GetUserId();
 
-            if (existingStudent == null)
+            var existingUser = await dbContext.Set<AppUser>().FirstOrDefaultAsync(s => s.Id == userId);
+
+            if (existingUser == null)
             {
-                return Result.Failure(ErrorType.NotFound, "Student not found.");
+                return Result.Failure(ErrorType.NotFound, "User not found.");
             }
 
             var uploadResult = await photoService.AddPhotoAsync(imageFile);
@@ -26,11 +29,11 @@ namespace Core.Features.Photos.AddPhoto
                 return Result.Failure(ErrorType.PhotoUploadError, uploadResult.Error.Message);
             }
 
-            existingStudent.AppUser.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
+            existingUser.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
 
             await dbContext.SaveChangesAsync();
 
-            return existingStudent.AppUser.ImageUrl;
+            return existingUser.ImageUrl;
         }
     }
 }
