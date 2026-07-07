@@ -12,8 +12,6 @@ public class InstructorConfiguration : IEntityTypeConfiguration<Instructor>
         builder.HasKey(i => i.Id);      
         builder.Property(i => i.Bio)
             .HasMaxLength(Instructor.MaxLength.Bio);
-        builder.Property(i => i.ImageUrl)
-            .HasMaxLength(200);
         builder.HasOne(i => i.AppUser)
             .WithOne(u => u.Instructor)
             .HasForeignKey<Instructor>(i => i.UserId)

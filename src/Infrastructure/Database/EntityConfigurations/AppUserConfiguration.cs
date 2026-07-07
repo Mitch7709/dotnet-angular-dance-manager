@@ -1,4 +1,4 @@
-﻿using Core.Models;
+using Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,5 +19,7 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
             .HasMaxLength(AppUser.MaxLength.Email);
         builder.Property(x => x.PhoneNumber)
             .HasMaxLength(AppUser.MaxLength.PhoneNumber);
+        builder.Property(x => x.ImageUrl)
+            .HasMaxLength(AppUser.MaxLength.ImageUrl);
     }
 }

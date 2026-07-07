@@ -11,8 +11,6 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
     {
         builder.ToTable("Students");
         builder.HasKey(s => s.Id);
-        builder.Property(s => s.ImageUrl)
-            .HasMaxLength(200);
         builder.Property(s => s.WaiverStatus)
             .HasMaxLength(20)
             .HasConversion<string>();

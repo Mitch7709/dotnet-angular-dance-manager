@@ -13,12 +13,12 @@ public class UpdateStudentPhotoUseCase(IPhotoService photoService, IDbContext db
     {
         var existingStudent = await dbContext.Set<Student>().FirstOrDefaultAsync(s => s.UserId == studentId);
 
-        if (existingStudent == null || string.IsNullOrEmpty(existingStudent.ImageUrl))
+        if (existingStudent == null || string.IsNullOrEmpty(existingStudent.AppUser.ImageUrl))
         {
             return Result.Failure(ErrorType.NotFound, "Student could not be found or does not have an existing photo.");
         }
 
-        var publicId = PhotoHelpers.GetImagePublicId(existingStudent.ImageUrl);
+        var publicId = PhotoHelpers.GetImagePublicId(existingStudent.AppUser.ImageUrl);
 
         var uploadResult = await photoService.UpdatePhotoAsync(publicId, imageFile);
 
@@ -27,10 +27,10 @@ public class UpdateStudentPhotoUseCase(IPhotoService photoService, IDbContext db
             return Result.Failure(ErrorType.PhotoUploadError, uploadResult.Error.Message);
         }
 
-        existingStudent.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
+        existingStudent.AppUser.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
         await dbContext.SaveChangesAsync();
 
-        return existingStudent.ImageUrl;
+        return existingStudent.AppUser.ImageUrl;
     }
 
 }

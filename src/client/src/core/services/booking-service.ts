@@ -30,6 +30,10 @@ export class BookingService {
     return this.http.post<BookingResponse>(this.baseUrl, booking);
   }
 
+  bookForUser(sessionId: number) {
+    return this.http.post<BookingResponse>(`${this.baseUrl}/${sessionId}`, {});
+  }
+
   update(id: number, booking: UpdateBookingRequest) {
     return this.http.put<UpdateBookingResponse>(`${this.baseUrl}/${id}`, booking);
   }

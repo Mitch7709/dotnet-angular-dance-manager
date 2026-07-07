@@ -1,4 +1,4 @@
-﻿using Core.Features.Users;
+using Core.Features.Users;
 using Core.Models;
 using Core.Shared;
 using Microsoft.AspNetCore.Http;
@@ -26,11 +26,11 @@ namespace Core.Features.Photos.AddPhoto
                 return Result.Failure(ErrorType.PhotoUploadError, uploadResult.Error.Message);
             }
 
-            existingStudent.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
+            existingStudent.AppUser.ImageUrl = uploadResult.SecureUrl.AbsoluteUri;
 
             await dbContext.SaveChangesAsync();
 
-            return existingStudent.ImageUrl;
+            return existingStudent.AppUser.ImageUrl;
         }
     }
 }

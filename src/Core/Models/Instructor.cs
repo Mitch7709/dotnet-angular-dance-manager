@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +17,6 @@ public class Instructor : BaseEntity
     public string UserId { get; set; } = string.Empty;
     public required AppUser AppUser { get; set; }
     public string? Bio { get; set; }
-    public string? ImageUrl { get; set; }
 
     public ICollection<ClassType> QualifiedClassTypes { get; set; } = [];
 }

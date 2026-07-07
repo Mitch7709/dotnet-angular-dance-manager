@@ -23,7 +23,7 @@ public class UpdateStudentUseCase(IDbContext dbContext)
         student.AppUser.Email = request.Email;
         student.AppUser.PhoneNumber = request.PhoneNumber;
         student.DateOfBirth = request.DateOfBirth;
-        student.ImageUrl = request.ImageUrl;
+        student.AppUser.ImageUrl = request.ImageUrl;
         student.WaiverStatus = Enum.Parse<WaiverStatus>(request.WaiverStatus, ignoreCase: true);
 
         await dbContext.SaveChangesAsync();
@@ -35,7 +35,7 @@ public class UpdateStudentUseCase(IDbContext dbContext)
             student.AppUser.PhoneNumber,
             student.AppUser.Email,
             student.DateOfBirth,
-            student.ImageUrl,
+            student.AppUser.ImageUrl,
             student.WaiverStatus
         );
     }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,10 +25,13 @@ public class AppUser : IdentityUser, IEntity
         public const int LastName = 50;
         public const int PhoneNumber = 20;
         public const int Email = 100;
+        public const int ImageUrl = 200;
     }
 
     public string FirstName { get; set; }
     public string LastName { get; set; }
+
+    public string? ImageUrl { get; set; }
 
     // Inverse navigations — disambiguates the two one-to-one relationships
     public Student? Student { get; set; }
