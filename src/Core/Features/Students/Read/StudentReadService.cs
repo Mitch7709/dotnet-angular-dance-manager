@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Features.Students.Read;
 
-public class StudentReadService(IDbContext dbContext)
+public class StudentReadService(IDbContext dbContext, IUserContext userContext)
 {
     public async Task<IReadOnlyList<StudentResponse>> GetAllAsync()
     {
@@ -18,7 +18,9 @@ public class StudentReadService(IDbContext dbContext)
                 s.AppUser.LastName,
                 s.AppUser.PhoneNumber,
                 s.AppUser.Email,
-                s.DateOfBirth
+                s.DateOfBirth,
+                s.WaiverStatus,
+                s.AppUser.ImageUrl ?? string.Empty
             ))
             .ToListAsync();
     }
@@ -34,7 +36,9 @@ public class StudentReadService(IDbContext dbContext)
                 s.AppUser.LastName,
                 s.AppUser.PhoneNumber,
                 s.AppUser.Email,
-                s.DateOfBirth
+                s.DateOfBirth,
+                s.WaiverStatus,
+                s.AppUser.ImageUrl ?? string.Empty
             ))
             .FirstOrDefaultAsync();
 
@@ -45,4 +49,36 @@ public class StudentReadService(IDbContext dbContext)
 
         return student;
     }
+
+    public async Task<Result<StudentResponse>> GetByUserIdAsync()
+    {
+        var userId = userContext.GetUserId();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Result.Failure(ErrorType.NotFound, "User not authenticated.");
+        }
+
+        var student = await dbContext.Set<Student>()
+            .Where(s => s.AppUser.Id == userId)
+            .Select(s => new StudentResponse
+            (
+                s.Id,
+                s.AppUser.FirstName,
+                s.AppUser.LastName,
+                s.AppUser.PhoneNumber,
+                s.AppUser.Email,
+                s.DateOfBirth,
+                s.WaiverStatus,
+                s.AppUser.ImageUrl ?? string.Empty
+            ))
+            .FirstOrDefaultAsync();
+
+        if (student is null)
+        {
+            return Result.Failure(ErrorType.NotFound, $"Student for user with id {userId} not found.");
+        }
+
+        return student;
+    }
+
 }

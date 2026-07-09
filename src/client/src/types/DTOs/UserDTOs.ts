@@ -31,6 +31,7 @@ export type User = {
     email: string;
     displayName: string;
     roles: AppRole[];
+    imageUrl?: string;
 }
 
 export type AppRole = 'Student' | 'Instructor' | 'Admin';

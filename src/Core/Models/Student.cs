@@ -16,7 +16,6 @@ public class Student : BaseEntity
     {
         if (!DateOfBirth.HasValue)
             return 0;
-            
         var today = DateOnly.FromDateTime(DateTime.Today);
         var age = today.Year - DateOfBirth.Value.Year;
         if (DateOfBirth.Value > today.AddYears(-age))

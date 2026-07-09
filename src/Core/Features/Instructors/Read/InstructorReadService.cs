@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Features.Instructors.Read;
 
-public class InstructorReadService(IDbContext dbContext)
+public class InstructorReadService(IDbContext dbContext, IUserContext userContext)
 {
     public async Task<IReadOnlyList<InstructorResponse>> GetAllAsync()
     {
@@ -44,6 +44,37 @@ public class InstructorReadService(IDbContext dbContext)
         if (instructor is null)
         {
             return Result.Failure(ErrorType.NotFound, $"Instructor with id {id} not found.");
+        }
+
+        return instructor;
+    }
+
+    public async Task<Result<InstructorResponse>> GetByUserIdAsync()
+    {
+        var userId = userContext.GetUserId();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Result.Failure(ErrorType.NotFound, "User not authenticated.");
+        }
+
+        var instructor = await dbContext.Set<Instructor>()
+            .AsNoTracking()
+            .Where(i => i.UserId == userId)
+            .Select(i => new InstructorResponse
+            (
+                i.Id,
+                i.AppUser.FirstName,
+                i.AppUser.LastName,
+                i.AppUser.PhoneNumber,
+                i.AppUser.Email,
+                i.Bio ?? string.Empty,
+                i.AppUser.ImageUrl ?? string.Empty
+            ))
+            .FirstOrDefaultAsync();
+
+        if (instructor is null)
+        {
+            return Result.Failure(ErrorType.NotFound, $"Instructor for user with id {userId} not found.");
         }
 
         return instructor;
