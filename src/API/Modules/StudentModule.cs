@@ -19,7 +19,6 @@ public class StudentModule : IModule
 
         group.MapGet("", GetStudents);
         group.MapGet("/{id}", GetStudentById);
-        group.MapGet("/me", GetStudentByUserId);
 
         group.MapPut("/{id}", UpdateStudent)
             .Validator<UpdateStudentRequest>();
@@ -36,14 +35,6 @@ public class StudentModule : IModule
     private static async Task<Results<Ok<StudentResponse>, NotFound<string>>> GetStudentById(int id, StudentReadService service)
     {
         var result = await service.GetByIdAsync(id);
-        return result.IsSuccess
-            ? TypedResults.Ok(result.Value)
-            : TypedResults.NotFound(result.ErrorMessage);
-    }
-
-    private static async Task<Results<Ok<StudentResponse>, NotFound<string>>> GetStudentByUserId(StudentReadService service)
-    {
-        var result = await service.GetByUserIdAsync();
         return result.IsSuccess
             ? TypedResults.Ok(result.Value)
             : TypedResults.NotFound(result.ErrorMessage);

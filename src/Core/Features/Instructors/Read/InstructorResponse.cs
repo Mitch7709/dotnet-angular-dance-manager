@@ -9,5 +9,7 @@ public record InstructorResponse(
     string PhoneNumber,
     string Email,
     string Bio,
-    string ImageUrl
+    string ImageUrl,
+    List<string> QualifiedClasses
+
 );

@@ -34,4 +34,14 @@ export type User = {
     imageUrl?: string;
 }
 
+export type StudentUser = {
+  dateOfBirth: string;
+  waiverStatus: string;
+}
+
+export type InstructorUser = {
+  bio: string;
+  qualifiedClasses: string[];
+}
+
 export type AppRole = 'Student' | 'Instructor' | 'Admin';

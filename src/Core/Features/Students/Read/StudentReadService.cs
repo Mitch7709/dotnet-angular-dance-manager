@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Features.Students.Read;
 
-public class StudentReadService(IDbContext dbContext, IUserContext userContext)
+public class StudentReadService(IDbContext dbContext)
 {
     public async Task<IReadOnlyList<StudentResponse>> GetAllAsync()
     {
@@ -18,7 +18,7 @@ public class StudentReadService(IDbContext dbContext, IUserContext userContext)
                 s.AppUser.LastName,
                 s.AppUser.PhoneNumber,
                 s.AppUser.Email,
-                s.DateOfBirth,
+                s.DateOfBirth ?? DateOnly.MinValue,
                 s.WaiverStatus,
                 s.AppUser.ImageUrl ?? string.Empty
             ))
@@ -36,7 +36,7 @@ public class StudentReadService(IDbContext dbContext, IUserContext userContext)
                 s.AppUser.LastName,
                 s.AppUser.PhoneNumber,
                 s.AppUser.Email,
-                s.DateOfBirth,
+                s.DateOfBirth ?? DateOnly.MinValue,
                 s.WaiverStatus,
                 s.AppUser.ImageUrl ?? string.Empty
             ))
@@ -50,13 +50,8 @@ public class StudentReadService(IDbContext dbContext, IUserContext userContext)
         return student;
     }
 
-    public async Task<Result<StudentResponse>> GetByUserIdAsync()
+    public async Task<Result<StudentResponse>> GetByUserIdAsync(string userId)
     {
-        var userId = userContext.GetUserId();
-        if (string.IsNullOrEmpty(userId))
-        {
-            return Result.Failure(ErrorType.NotFound, "User not authenticated.");
-        }
 
         var student = await dbContext.Set<Student>()
             .Where(s => s.AppUser.Id == userId)
@@ -67,7 +62,7 @@ public class StudentReadService(IDbContext dbContext, IUserContext userContext)
                 s.AppUser.LastName,
                 s.AppUser.PhoneNumber,
                 s.AppUser.Email,
-                s.DateOfBirth,
+                s.DateOfBirth ?? DateOnly.MinValue,
                 s.WaiverStatus,
                 s.AppUser.ImageUrl ?? string.Empty
             ))

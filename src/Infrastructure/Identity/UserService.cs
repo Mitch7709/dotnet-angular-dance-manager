@@ -1,7 +1,7 @@
-﻿using Core.Features.Users;
+using System.Security.Claims;
+using Core.Features.Users;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 
 namespace Infrastructure.Identity;
 
@@ -37,5 +37,11 @@ public class UserService(UserManager<AppUser> userManager) : IUserService
         }
 
         return Result.Failure(ErrorType.DataError, result.Errors.FirstOrDefault()?.Description ?? "User creation failed");
+    }
+
+    public async Task<string> GetRole(AppUser user)
+    {
+        var roles = await userManager.GetRolesAsync(user);
+        return roles.FirstOrDefault() ?? string.Empty;
     }
 }

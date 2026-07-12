@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Features.Instructors.Read;
 
-public class InstructorReadService(IDbContext dbContext, IUserContext userContext)
+public class InstructorReadService(IDbContext dbContext)
 {
     public async Task<IReadOnlyList<InstructorResponse>> GetAllAsync()
     {
@@ -19,7 +19,8 @@ public class InstructorReadService(IDbContext dbContext, IUserContext userContex
                 i.AppUser.PhoneNumber,
                 i.AppUser.Email,
                 i.Bio ?? string.Empty,
-                i.AppUser.ImageUrl ?? string.Empty
+                i.AppUser.ImageUrl ?? string.Empty,
+                i.QualifiedClassTypes.Select(ct => ct.Name).ToList()
             ))
             .ToListAsync();
     }
@@ -37,7 +38,8 @@ public class InstructorReadService(IDbContext dbContext, IUserContext userContex
                 i.AppUser.PhoneNumber,
                 i.AppUser.Email,
                 i.Bio ?? string.Empty,
-                i.AppUser.ImageUrl ?? string.Empty
+                i.AppUser.ImageUrl ?? string.Empty,
+                i.QualifiedClassTypes.Select(ct => ct.Name).ToList()
             ))
             .FirstOrDefaultAsync();
 
@@ -49,13 +51,8 @@ public class InstructorReadService(IDbContext dbContext, IUserContext userContex
         return instructor;
     }
 
-    public async Task<Result<InstructorResponse>> GetByUserIdAsync()
+    public async Task<Result<InstructorResponse>> GetByUserIdAsync(string userId)
     {
-        var userId = userContext.GetUserId();
-        if (string.IsNullOrEmpty(userId))
-        {
-            return Result.Failure(ErrorType.NotFound, "User not authenticated.");
-        }
 
         var instructor = await dbContext.Set<Instructor>()
             .AsNoTracking()
@@ -68,7 +65,8 @@ public class InstructorReadService(IDbContext dbContext, IUserContext userContex
                 i.AppUser.PhoneNumber,
                 i.AppUser.Email,
                 i.Bio ?? string.Empty,
-                i.AppUser.ImageUrl ?? string.Empty
+                i.AppUser.ImageUrl ?? string.Empty,
+                i.QualifiedClassTypes.Select(ct => ct.Name).ToList()
             ))
             .FirstOrDefaultAsync();
 
