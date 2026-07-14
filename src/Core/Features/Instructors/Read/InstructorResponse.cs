@@ -8,6 +8,7 @@ public record InstructorResponse(
     string LastName,
     string PhoneNumber,
     string Email,
+    DateOnly DateOfBirth,
     string Bio,
     string ImageUrl,
     List<string> QualifiedClasses

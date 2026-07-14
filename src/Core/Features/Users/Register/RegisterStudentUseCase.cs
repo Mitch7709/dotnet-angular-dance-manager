@@ -1,6 +1,6 @@
-﻿using Core.Models;
-using Core.Features.Students.Create;
 using Core.Features.Instructors.Create;
+using Core.Features.Students.Create;
+using Core.Models;
 
 namespace Core.Features.Users.Register;
 
@@ -18,12 +18,16 @@ public class RegisterStudentUseCase(
             return Result.Failure(ErrorType.ValidationError, "User already exists with this email.");
         }
 
+        DateOnly? dateOfBirth = DateOnly.TryParse(request.DateOfBirth, out var dob) ? dob : null;
+
         var user = new AppUser
         (
             request.Email,
             request.FirstName,
             request.LastName,
-            request.PhoneNumber
+            request.PhoneNumber,
+            dateOfBirth,
+            request.Bio
         );
 
         var result = await userService.Register(user, request.Password, UserRole.Student);
@@ -32,13 +36,14 @@ public class RegisterStudentUseCase(
             return Result.Failure(result.ErrorType.Value, result.ErrorMessage);
         }
 
-        var dateOfBirth = DateOnly.ParseExact(request.DateOfBirth, "yyyy-MM-dd", null);
-
-        var studentRequest = new CreateStudentRequest(user.Id, dateOfBirth);
+        var studentRequest = new CreateStudentRequest(user.Id);
         await createStudentUseCase.ExecuteAsync(studentRequest);
 
         var token = await tokenService.GenerateToken(user);
 
-        return new RegisterResponse(user.Id, token);
+        return new RegisterResponse(
+            user.Id,
+            token
+        );
     }
 }

@@ -16,10 +16,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer()
                         .AddOpenApi()
                         .AddAntiforgery()
-                        .ConfigureHttpJsonOptions(options =>
-                        {
-                            options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
-                        })
+                        .ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()))
                         .AddHttpContextAccessor()
                         .AddCustomConfiguration(builder.Configuration)
                         .AddDatabase()

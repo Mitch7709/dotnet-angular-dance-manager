@@ -1,13 +1,11 @@
-﻿using Core.Features.Users;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Core.Features.Users;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Infrastructure.Identity;
 
@@ -27,7 +25,10 @@ public class TokenService(UserManager<AppUser> userManager, IOptions<JwtOptions>
         var claims = new List<Claim>
     {
         new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        new Claim("displayName", user.FirstName),
+        new Claim("imageUrl", user.ImageUrl ?? string.Empty)
     }
         .Union(userClaims)
         .Union(roleClaims);

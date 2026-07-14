@@ -1,8 +1,8 @@
-﻿using Core.Features.Instructors.Create;
-using Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Core.Features.Instructors.Create;
+using Core.Models;
 
 namespace Core.Features.Users.Register
 {
@@ -26,12 +26,16 @@ namespace Core.Features.Users.Register
                 return Result.Failure(ErrorType.ValidationError, "A bio is required for instructors.");
             }
 
+            DateOnly? dateOfBirth = DateOnly.TryParse(request.DateOfBirth, out var dob) ? dob : null;
+
             var user = new AppUser
             (
                 request.Email,
                 request.FirstName,
                 request.LastName,
-                request.PhoneNumber
+                request.PhoneNumber,
+                dateOfBirth,
+                request.Bio
             );
             var result = await userService.Register(user, request.Password, UserRole.Instructor);
             if (result.IsFailure)
@@ -43,7 +47,11 @@ namespace Core.Features.Users.Register
             await createInstructorUseCase.ExecuteAsync(instructorRequest);
 
             var token = await tokenService.GenerateToken(user);
-            return new RegisterResponse(user.Id, token);
+
+            return new RegisterResponse(
+                user.Id,
+                token
+            );
         }
     }
 }

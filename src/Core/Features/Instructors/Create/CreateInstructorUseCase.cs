@@ -15,8 +15,7 @@ public class CreateInstructorUseCase(IDbContext dbContext)
         var instructor = new Instructor
         {
             UserId = appUser.Id,
-            AppUser = appUser,
-            Bio = request.Bio
+            AppUser = appUser
         };
 
         dbContext.Set<Instructor>().Add(instructor);

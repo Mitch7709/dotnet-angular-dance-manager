@@ -22,7 +22,7 @@ public class UpdateStudentUseCase(IDbContext dbContext)
         student.AppUser.LastName = request.LastName;
         student.AppUser.Email = request.Email;
         student.AppUser.PhoneNumber = request.PhoneNumber;
-        student.DateOfBirth = request.DateOfBirth;
+        student.AppUser.DateOfBirth = request.DateOfBirth;
         student.AppUser.ImageUrl = request.ImageUrl;
         student.WaiverStatus = Enum.Parse<WaiverStatus>(request.WaiverStatus, ignoreCase: true);
 
@@ -34,7 +34,7 @@ public class UpdateStudentUseCase(IDbContext dbContext)
             student.AppUser.LastName,
             student.AppUser.PhoneNumber,
             student.AppUser.Email,
-            student.DateOfBirth,
+            student.AppUser.DateOfBirth,
             student.AppUser.ImageUrl,
             student.WaiverStatus
         );

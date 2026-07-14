@@ -18,7 +18,8 @@ public class InstructorReadService(IDbContext dbContext)
                 i.AppUser.LastName,
                 i.AppUser.PhoneNumber,
                 i.AppUser.Email,
-                i.Bio ?? string.Empty,
+                i.AppUser.DateOfBirth ?? DateOnly.MinValue,
+                i.AppUser.Bio ?? string.Empty,
                 i.AppUser.ImageUrl ?? string.Empty,
                 i.QualifiedClassTypes.Select(ct => ct.Name).ToList()
             ))
@@ -37,7 +38,8 @@ public class InstructorReadService(IDbContext dbContext)
                 i.AppUser.LastName,
                 i.AppUser.PhoneNumber,
                 i.AppUser.Email,
-                i.Bio ?? string.Empty,
+                i.AppUser.DateOfBirth ?? DateOnly.MinValue,
+                i.AppUser.Bio ?? string.Empty,
                 i.AppUser.ImageUrl ?? string.Empty,
                 i.QualifiedClassTypes.Select(ct => ct.Name).ToList()
             ))
@@ -64,7 +66,8 @@ public class InstructorReadService(IDbContext dbContext)
                 i.AppUser.LastName,
                 i.AppUser.PhoneNumber,
                 i.AppUser.Email,
-                i.Bio ?? string.Empty,
+                i.AppUser.DateOfBirth ?? DateOnly.MinValue,
+                i.AppUser.Bio ?? string.Empty,
                 i.AppUser.ImageUrl ?? string.Empty,
                 i.QualifiedClassTypes.Select(ct => ct.Name).ToList()
             ))

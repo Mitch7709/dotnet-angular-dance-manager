@@ -1,6 +1,6 @@
-﻿using Core.Models;
+﻿using System;
+using Core.Models;
 using Microsoft.AspNetCore.Http;
-using System;
 
 namespace Core.Features.Users.Register;
 
@@ -10,6 +10,7 @@ public record RegisterStudentRequest(
     string Email,
     string PhoneNumber,
     string DateOfBirth,
+    string? Bio,
     string Password
     );
 
@@ -19,6 +20,7 @@ public record RegisterStudentRequest(
         string Email,
         string PhoneNumber,
         string? Bio,
+        string DateOfBirth,
         string Password
     );
 

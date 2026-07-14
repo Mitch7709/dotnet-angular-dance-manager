@@ -8,7 +8,7 @@ namespace Core.Features.Photos.AddPhoto
 {
     public class AddPhotoToUserUseCase(
         IPhotoService photoService,
-        IUserContext userContext, 
+        IUserContext userContext,
         IDbContext dbContext)
     {
         public async Task<Result<string>> ExecuteAsync(IFormFile imageFile)

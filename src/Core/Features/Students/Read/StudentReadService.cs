@@ -18,7 +18,8 @@ public class StudentReadService(IDbContext dbContext)
                 s.AppUser.LastName,
                 s.AppUser.PhoneNumber,
                 s.AppUser.Email,
-                s.DateOfBirth ?? DateOnly.MinValue,
+                s.AppUser.DateOfBirth ?? DateOnly.MinValue,
+                s.AppUser.Bio ?? string.Empty,
                 s.WaiverStatus,
                 s.AppUser.ImageUrl ?? string.Empty
             ))
@@ -36,7 +37,8 @@ public class StudentReadService(IDbContext dbContext)
                 s.AppUser.LastName,
                 s.AppUser.PhoneNumber,
                 s.AppUser.Email,
-                s.DateOfBirth ?? DateOnly.MinValue,
+                s.AppUser.DateOfBirth ?? DateOnly.MinValue,
+                s.AppUser.Bio ?? string.Empty,
                 s.WaiverStatus,
                 s.AppUser.ImageUrl ?? string.Empty
             ))
@@ -62,7 +64,8 @@ public class StudentReadService(IDbContext dbContext)
                 s.AppUser.LastName,
                 s.AppUser.PhoneNumber,
                 s.AppUser.Email,
-                s.DateOfBirth ?? DateOnly.MinValue,
+                s.AppUser.DateOfBirth ?? DateOnly.MinValue,
+                s.AppUser.Bio ?? string.Empty,
                 s.WaiverStatus,
                 s.AppUser.ImageUrl ?? string.Empty
             ))

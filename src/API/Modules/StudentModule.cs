@@ -51,8 +51,8 @@ public class StudentModule : IModule
     private static async Task<Results<NoContent, NotFound<string>, BadRequest<string>>> DeleteStudent(int id, DeleteStudentUseCase useCase)
     {
         var result = await useCase.ExecuteAsync(id);
-        
-        if (result.IsSuccess) 
+
+        if (result.IsSuccess)
             return TypedResults.NoContent();
 
         return result.ErrorType == ErrorType.NotFound

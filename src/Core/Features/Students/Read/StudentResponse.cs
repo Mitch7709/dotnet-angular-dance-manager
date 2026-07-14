@@ -10,6 +10,7 @@ public record StudentResponse (
     string PhoneNumber,
     string Email,
     DateOnly DateOfBirth,
+    string Bio,
     WaiverStatus WaiverStatus,
     string? ImageUrl
 );

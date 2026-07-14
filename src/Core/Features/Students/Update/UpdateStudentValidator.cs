@@ -8,7 +8,7 @@ namespace Core.Features.Students.Update
 {
     public class UpdateStudentValidator : AbstractValidator<UpdateStudentRequest>
     {
-        public UpdateStudentValidator() 
+        public UpdateStudentValidator()
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty()

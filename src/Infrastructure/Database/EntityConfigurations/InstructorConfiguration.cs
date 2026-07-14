@@ -9,9 +9,7 @@ public class InstructorConfiguration : IEntityTypeConfiguration<Instructor>
     public void Configure(EntityTypeBuilder<Instructor> builder)
     {
         builder.ToTable("Instructors");
-        builder.HasKey(i => i.Id);      
-        builder.Property(i => i.Bio)
-            .HasMaxLength(Instructor.MaxLength.Bio);
+        builder.HasKey(i => i.Id);
         builder.HasOne(i => i.AppUser)
             .WithOne(u => u.Instructor)
             .HasForeignKey<Instructor>(i => i.UserId)

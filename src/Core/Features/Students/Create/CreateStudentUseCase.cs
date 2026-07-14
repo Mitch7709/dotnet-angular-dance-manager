@@ -13,12 +13,10 @@ public class CreateStudentUseCase(IDbContext dbContext)
         var appUser = await dbContext.Set<AppUser>()
             .SingleAsync(u => u.Id == request.AppUserId);
 
-
         var student = new Student
         {
             UserId = appUser.Id,
             AppUser = appUser,
-            DateOfBirth = request.DateOfBirth,
             WaiverStatus = WaiverStatus.NotSigned
         };
 
@@ -30,7 +28,6 @@ public class CreateStudentUseCase(IDbContext dbContext)
             student.Id,
             appUser.FirstName,
             appUser.LastName,
-            student.DateOfBirth,
             appUser.Email,
             appUser.PhoneNumber
         );

@@ -21,7 +21,7 @@ public class UpdateInstructorUseCase(IDbContext dbContext)
         instructor.AppUser.LastName = request.LastName;
         instructor.AppUser.PhoneNumber = request.PhoneNumber;
         instructor.AppUser.Email = request.Email;
-        instructor.Bio = request.Bio;
+        instructor.AppUser.Bio = request.Bio;
         instructor.AppUser.ImageUrl = request.ImageUrl;
 
         await dbContext.SaveChangesAsync();
@@ -32,7 +32,7 @@ public class UpdateInstructorUseCase(IDbContext dbContext)
             instructor.AppUser.LastName,
             instructor.AppUser.PhoneNumber,
             instructor.AppUser.Email,
-            instructor.Bio,
+            instructor.AppUser.Bio,
             instructor.AppUser.ImageUrl
         );
     }
