@@ -50,11 +50,11 @@
           Account
           <img
             class="w-8 h-8 rounded-full"
-            src="https://res.cloudinary.com/duropaytg/image/upload/v1783453660/TheGrove/r34qjdhhkd8mp18fpz1z.jpg">
+            [src]="userService.currentUser()?.imageUrl">
         </div>
         <ul
           tabindex="-1"
-          class="menu dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow-sm"
+          class="menu dropdown-content bg-base-200 rounded-box z-1 mt-4 w-40 p-2 shadow-sm"
           (click)="handleSelectUserItem()"
         >
           @if (!userService.isAuthenticated()) {
@@ -62,6 +62,9 @@
               <a routerLink="/auth" class="btn btn-outline btn-primary">Login</a>
             </li>
           } @else {
+            <li>
+              <a routerLink="/profile" class="btn btn-outline btn-primary">Profile</a>
+            </li>
             <li>
               <a class="btn btn-outline btn-primary" (click)="handleLogout()">Logout</a>
             </li>

@@ -12,6 +12,6 @@ export class PhotoService {
   uploadStudentPhoto(id: string, file: File) {
     const formData = new FormData();
     formData.append('imageFile', file);
-    return this.http.post(`${this.baseUrl}/student/${id}`, formData);
+    return this.http.post(`${this.baseUrl}`, formData);
   }
 }

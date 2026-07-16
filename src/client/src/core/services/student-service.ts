@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Student, UpdateStudentRequest } from '../../types/DTOs/StudentDTOs';
+import { StudentResponse, UpdateStudentRequest } from '../../types/DTOs/StudentDTOs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +12,10 @@ export class StudentService {
   private readonly baseUrl = environment.apiUrl + 'students';
 
   getAll() {
-    return this.http.get<Student[]>(this.baseUrl);
+    return this.http.get<StudentResponse[]>(this.baseUrl);
   }
   getById(id: number) {
-    return this.http.get<Student>(`${this.baseUrl}/${id}`);
+    return this.http.get<StudentResponse>(`${this.baseUrl}/${id}`);
   }
   update(id: number, body: UpdateStudentRequest) {
     return this.http.put(`${this.baseUrl}/${id}`, body);

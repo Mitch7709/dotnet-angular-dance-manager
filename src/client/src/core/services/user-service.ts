@@ -85,10 +85,6 @@ export class UserService {
       return;
     }
     this._currentUser.set(user);
-
-    console.log('User token is valid, hydrating user info from storage...');
-    console.log('Decoded user info:', user);
-    console.log('User information: ', this.currentUser());
   }
 
   setCurrentUser(response: AuthResponse) {
@@ -107,6 +103,7 @@ export class UserService {
       const normalizedRoles = Array.isArray(roles) ? roles : [roles];
 
       const user: User = {
+        userId: payload.sub,
         email: payload.email,
         displayName: payload.displayName,
         imageUrl: payload.imageUrl,

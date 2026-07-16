@@ -1,19 +1,11 @@
-export type Student = {
+export type StudentResponse = {
   id: number;
   firstName: string;
   lastName: string;
   phoneNumber: string;
   email: string;
   dateOfBirth: string;
-};
-
-export type StudentResponse = {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  email: string;
-  dateOfBirth: string;
-  imageUrl: any;
+  imageUrl?: any;
   waiverStatus: string;
 };
 

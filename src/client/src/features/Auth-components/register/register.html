@@ -48,9 +48,11 @@
                   </div>
 
                   <input
-                    type="text"
+                    type="tel"
                     class="input input-bordered w-full"
                     formControlName="phoneNumber"
+                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                    placeholder="123-456-7890"
                   />
                 </label>
               </label>
@@ -68,6 +70,20 @@
                 />
               </label>
             </div>
+          </div>
+
+          <div class="col-span-2">
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text"> Bio </span>
+              </div>
+
+              <textarea
+                class="textarea textarea-bordered w-full"
+                formControlName="bio"
+                placeholder="Tell us a little about yourself..."
+              ></textarea>
+            </label>
           </div>
 
           <div class="col-span-2">
@@ -164,7 +180,7 @@
             <ul class="space-y-3 mt-2">
               <li>✔ Build your personal brand</li>
 
-              <li>✔ Connect with other dancers</li>
+              <li>✔ Connect with other students</li>
 
               <li>✔ Stand out in the community</li>
             </ul>

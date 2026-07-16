@@ -57,11 +57,11 @@ export class Register {
       lastName: formData.lastName,
       phoneNumber: formData.phoneNumber,
       dateOfBirth: formData.dateOfBirth,
+      bio: formData.bio,
     };
 
     this.userService.registerStudent(studentCreds).subscribe({
       next: (response) => {
-        // this.toastService.success('Student registration successful');
         const photoFile = this.registerForm.get('photo')?.value;
         if (photoFile) {
           this.photoService.uploadStudentPhoto(response.userId, photoFile).subscribe({
@@ -78,7 +78,6 @@ export class Register {
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400 && error.error?.errors) {
-          // Validation errors from EndpointValidationFilter
           const validationErrors: Record<string, string[]> = error.error.errors;
 
           this.displayValidationErrors(validationErrors);

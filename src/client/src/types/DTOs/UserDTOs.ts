@@ -9,6 +9,7 @@ export type RegisterStudentCreds = {
     lastName: string;
     email: string;
     dateOfBirth: string;
+    bio?: string;
     phoneNumber: string;
     password: string;
 };
@@ -28,6 +29,7 @@ export type AuthResponse = {
 }
 
 export type User = {
+    userId: string;
     email: string;
     displayName: string;
     roles: AppRole[];
