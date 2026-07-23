@@ -6,6 +6,7 @@ import { Classtype } from '../features/classtype/classtype';
 import { roleGuard } from '../core/guards/role-guard';
 import { Session } from '../features/session/session';
 import { Booking } from '../features/booking/booking';
+import { Dashboard } from '../features/user-profile/dashboard/dashboard';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -31,6 +32,11 @@ export const routes: Routes = [
   {
     path: 'bookings',
     component: Booking,
+    canActivate: [roleGuard]
+  },
+  {
+    path: 'profile',
+    component: Dashboard,
     canActivate: [roleGuard]
   }
 ];
