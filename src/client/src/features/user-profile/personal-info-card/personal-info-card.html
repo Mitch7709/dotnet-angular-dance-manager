@@ -24,20 +24,51 @@
         </div>
       </div>
 
-      <button class="btn btn-sm btn-outline btn-primary">Edit</button>
+      <button class="btn btn-sm btn-outline btn-primary" (click)="toggleEditMode()">Edit</button>
     </div>
 
     <div class="divider my-2"></div>
 
-    <div class="grid gap-5 md:grid-cols-2">
+    <div class="grid gap-5 md:grid-cols-2 w-3.5/4">
       <label class="text-md uppercase tracking-wide text-base-content/60">First Name</label>
-      <p class="font-medium">{{ firstName }}</p>
+      <input
+        type="text"
+        class="font-medium"
+        [value]="student?.firstName"
+        [readonly]="!isEditMode"
+      />
 
       <label class="text-md uppercase tracking-wide text-base-content/60">Last Name</label>
-      <p class="font-medium">{{ lastName }}</p>
+      <input type="text" class="font-medium" [class.border-2]="isEditMode" [value]="student?.lastName" [readonly]="!isEditMode" />
 
       <label class="text-md uppercase tracking-wide text-base-content/60">Email</label>
-      <p class="font-medium">{{ userService.currentUser()?.email }}</p>
+      <input type="email" class="font-medium" [value]="student?.email" [readonly]="!isEditMode" />
+
+      <label class="text-md uppercase tracking-wide text-base-content/60">Phone Number</label>
+      <input
+        type="tel"
+        class="font-medium"
+        [value]="student?.phoneNumber"
+        [readonly]="!isEditMode"
+      />
+
+      <label class="text-md uppercase tracking-wide text-base-content/60">Date of Birth</label>
+      <input
+        type="date"
+        class="font-medium"
+        [value]="student?.dateOfBirth"
+        [readonly]="!isEditMode"
+      />
+
+      <label class="text-md uppercase tracking-wide text-base-content/60">Bio</label>
+      <textarea class="font-medium" [value]="student?.bio" [readonly]="!isEditMode"></textarea>
     </div>
+
+    @if (isEditMode) {
+      <div class="flex justify-end mt-4">
+        <button class="btn btn-primary" (click)="saveChanges()">Save</button>
+        <button class="btn btn-outline btn-error ml-2" (click)="cancelEdit()">Cancel</button>
+      </div>
+    }
   </div>
 </div>

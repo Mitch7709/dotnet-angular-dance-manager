@@ -15,7 +15,9 @@ public class UserModule : IModule
             .Validator<RegisterStudentRequest>();
         app.MapPost("/register/instructor", RegisterInstructor)
             .WithTags("Users")
-            .Validator<RegisterInstructorRequest>();
+            .Validator<RegisterInstructorRequest>()
+            .RequireAuthorization(Security.AdminPolicy);
+
 
         app.MapPost("/login", Login)
             .WithTags("Users")

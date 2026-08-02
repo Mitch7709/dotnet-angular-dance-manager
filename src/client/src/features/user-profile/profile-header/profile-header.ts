@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { UserService } from '../../../core/services/user-service';
+import { Component, inject, Input } from '@angular/core';
+import { User } from '../../../types/DTOs/UserDTOs';
 
 @Component({
   selector: 'app-profile-header',
@@ -8,5 +8,5 @@ import { UserService } from '../../../core/services/user-service';
   styleUrl: './profile-header.css',
 })
 export class ProfileHeader {
-  protected userService = inject(UserService);
+  @Input() user: User | null = null;
 }

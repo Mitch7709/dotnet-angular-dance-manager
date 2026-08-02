@@ -5,6 +5,7 @@ export type StudentResponse = {
   phoneNumber: string;
   email: string;
   dateOfBirth: string;
+  bio: string;
   imageUrl?: any;
   waiverStatus: string;
 };

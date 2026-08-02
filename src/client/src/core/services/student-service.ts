@@ -9,13 +9,18 @@ import { StudentResponse, UpdateStudentRequest } from '../../types/DTOs/StudentD
 export class StudentService {
   private readonly http = inject(HttpClient);
 
-  private readonly baseUrl = environment.apiUrl + 'students';
+  private readonly baseUrl = environment.apiUrl + '/students';
 
   getAll() {
     return this.http.get<StudentResponse[]>(this.baseUrl);
   }
   getById(id: number) {
     return this.http.get<StudentResponse>(`${this.baseUrl}/${id}`);
+  }
+  getByUserId(userId: string) {
+    const url = `${this.baseUrl}/me`;
+    const options = { params: { userId } };
+    return this.http.get<StudentResponse>(url, options);
   }
   update(id: number, body: UpdateStudentRequest) {
     return this.http.put(`${this.baseUrl}/${id}`, body);

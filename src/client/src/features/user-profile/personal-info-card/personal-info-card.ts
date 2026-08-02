@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { UserService } from '../../../core/services/user-service';
+import { Component, Input } from '@angular/core';
+import { StudentResponse } from '../../../types/DTOs/StudentDTOs';
 
 @Component({
   selector: 'app-personal-info-card',
@@ -8,9 +8,25 @@ import { UserService } from '../../../core/services/user-service';
   styleUrl: './personal-info-card.css',
 })
 export class PersonalInfoCard {
-  protected userService = inject(UserService);
+  @Input() student: StudentResponse | null = null;
 
-  protected fullName: string = this.userService.currentUser()?.displayName || '';
-  protected firstName: string = this.fullName.split(' ')[0] || '';
-  protected lastName: string = this.fullName.split(' ')[1] || '';
+  protected isEditMode = false;
+
+  toggleEditMode(): void {
+    this.isEditMode = !this.isEditMode;
+  }
+
+  saveChanges(): void {
+    // Implement the logic to save changes here
+    this.isEditMode = false;
+  }
+
+  cancelEdit(): void {
+    this.isEditMode = false;
+
+    var inputs = document.querySelectorAll('input');
+    inputs.forEach((input) => {
+      input.value = input.defaultValue;
+    });
+  }
 }
