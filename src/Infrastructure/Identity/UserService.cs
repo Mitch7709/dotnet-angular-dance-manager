@@ -44,4 +44,14 @@ public class UserService(UserManager<AppUser> userManager) : IUserService
         var roles = await userManager.GetRolesAsync(user);
         return roles.FirstOrDefault() ?? string.Empty;
     }
+
+    public async Task<AppUser?> FindById(string userId)
+    {
+        return await userManager.FindByIdAsync(userId);
+    }
+
+    public async Task UpdateAsync(AppUser user)
+    {
+        await userManager.UpdateAsync(user);
+    }
 }

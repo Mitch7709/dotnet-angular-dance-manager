@@ -16,7 +16,7 @@ export type UpdateStudentRequest = {
   phoneNumber: string;
   email: string;
   dateOfBirth: string;
-  imageUrl: any;
+  bio: string;
   waiverStatus: string;
 };
 
@@ -26,6 +26,6 @@ export type UpdateStudentResponse = {
   phoneNumber: string;
   email: string;
   dateOfBirth: string;
-  imageUrl: any;
+  bio: string;
   waiverStatus: string;
 };

@@ -40,7 +40,7 @@ export class Login {
       next: (response) => {
         // console.log('Login successful:', response);
         this.toast.success('Login successful!');
-        this.router.navigate(['/']); // Redirect to home or dashboard after successful login
+        this.router.navigate(['/profile']); // Redirect to home or dashboard after successful login
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400 && error.error?.errors) {

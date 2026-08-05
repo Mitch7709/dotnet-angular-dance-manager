@@ -36,6 +36,15 @@ export type User = {
     imageUrl?: string;
 }
 
+export type UserInfo = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  dateOfBirth?: string;
+  bio?: string;
+}
+
 export type StudentUser = {
   dateOfBirth: string;
   waiverStatus: string;

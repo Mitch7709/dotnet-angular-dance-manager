@@ -11,4 +11,6 @@ public interface IUserService
     Task<Result<string>> Register(AppUser user, string password, UserRole role);
     Task<AppUser?> Login(string email, string password);
     Task<string> GetRole(AppUser user);
+    Task<AppUser?> FindById(string userId);
+    Task UpdateAsync(AppUser user);
 }

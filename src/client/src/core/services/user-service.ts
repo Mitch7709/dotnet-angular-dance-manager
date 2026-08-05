@@ -8,6 +8,7 @@ import {
   RegisterInstructorCreds,
   RegisterStudentCreds,
   User,
+  UserInfo,
 } from '../../types/DTOs/UserDTOs';
 import { tap } from 'rxjs';
 
@@ -22,10 +23,15 @@ export class UserService {
   readonly currentUser = this._currentUser.asReadonly();
 
   private http = inject(HttpClient);
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl + '/users';
 
   constructor() {
     this.hydrateUserFromStorage();
+  }
+
+  updateUser(userId: string, user: UserInfo) {
+    return this.http.put<UserInfo>(`${this.baseUrl}/${userId}`, user).pipe(
+    );
   }
 
   registerStudent(creds: RegisterStudentCreds) {

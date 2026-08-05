@@ -1,8 +1,10 @@
-﻿using API.Extensions;
+using API.Extensions;
 using Core.Features.Users.Login;
 using Core.Features.Users.Register;
+using Core.Features.Users.Update;
 using Core.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.FileProviders;
 
 namespace API.Modules;
 
@@ -10,18 +12,21 @@ public class UserModule : IModule
 {
     public void MapEndpoints(IEndpointRouteBuilder app)
     {
-        app.MapPost("/register/student", RegisterStudent)
-            .WithTags("Users")
+        var group = app.MapGroup("/users")
+            .WithTags("Users");
+
+        group.MapPost("/register/student", RegisterStudent)
             .Validator<RegisterStudentRequest>();
-        app.MapPost("/register/instructor", RegisterInstructor)
-            .WithTags("Users")
+        group.MapPost("/register/instructor", RegisterInstructor)
             .Validator<RegisterInstructorRequest>()
             .RequireAuthorization(Security.AdminPolicy);
 
-
-        app.MapPost("/login", Login)
-            .WithTags("Users")
+        group.MapPost("/login", Login)
             .Validator<LoginRequest>();
+
+        group.MapPut("/{userId}", UpdateUser)
+            .Validator<UpdateUserRequest>()
+            .RequireAuthorization();
     }
 
     private static async Task<IResult> Login(LoginRequest request, LoginUseCase useCase)
@@ -61,4 +66,11 @@ public class UserModule : IModule
         };
     }
 
+    private static async Task<Results<Ok<UpdateUserResponse>, NotFound<string>>> UpdateUser(string userId, UpdateUserRequest request, UpdateUserUseCase useCase)
+    {
+        var result = await useCase.ExecuteAsync(userId, request);
+        return result.IsSuccess
+            ? TypedResults.Ok(result.Value)
+            : TypedResults.NotFound(result.ErrorMessage);
+    }
 }

@@ -8,7 +8,7 @@ namespace API.Extensions;
 public static class Security
 {
     public const string CorsPolicy = "OpenCorsPolicy";
-    public const string AdminPolicy = "Admin"; 
+    public const string AdminPolicy = "Admin";
     public const string InstructorPolicy = "Instructor";
     public const string NonStudentPolicy = "NonStudent";
 }

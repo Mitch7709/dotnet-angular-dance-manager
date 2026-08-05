@@ -9,7 +9,7 @@ public record UpdateStudentRequest(
     string PhoneNumber,
     string Email,
     DateOnly? DateOfBirth,
-    string ImageUrl,
+    string Bio,
     string WaiverStatus
 );
 
@@ -20,6 +20,6 @@ public record UpdateStudentResponse(
     string PhoneNumber,
     string Email,
     DateOnly? DateOfBirth,
-    string ImageUrl,
+    string Bio,
     WaiverStatus WaiverStatus
 );

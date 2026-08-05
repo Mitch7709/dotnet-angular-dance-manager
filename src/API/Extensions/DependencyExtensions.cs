@@ -29,6 +29,7 @@ using Core.Features.TimeSlots.Update;
 using Core.Features.Users;
 using Core.Features.Users.Login;
 using Core.Features.Users.Register;
+using Core.Features.Users.Update;
 using Core.Shared;
 using FluentValidation;
 using Infrastructure.Database;
@@ -92,6 +93,9 @@ public static class DependencyExtensions
 
         services.AddTransient<LoginUseCase>();
         services.AddValidatorsFromAssemblyContaining<LoginValidator>();
+
+        services.AddTransient<UpdateUserUseCase>();
+        services.AddValidatorsFromAssemblyContaining<UpdateUserValidator>();
 
         services.AddTransient<AddPhotoToUserUseCase>();
         services.AddTransient<UpdateUserPhotoUseCase>();
