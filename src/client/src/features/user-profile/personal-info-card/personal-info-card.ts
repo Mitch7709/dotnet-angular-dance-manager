@@ -1,7 +1,9 @@
 import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { StudentResponse, UpdateStudentRequest } from '../../../types/DTOs/StudentDTOs';
-import { StudentService } from '../../../core/services/student-service';
+import { UserService } from '../../../core/services/user-service';
+import { UserInfo } from '../../../types/DTOs/UserDTOs';
+import { ToastService } from '../../../core/services/toast-service';
 
 @Component({
   selector: 'app-personal-info-card',
@@ -10,24 +12,25 @@ import { StudentService } from '../../../core/services/student-service';
   styleUrl: './personal-info-card.css',
 })
 export class PersonalInfoCard implements OnChanges {
-  private readonly studentService = inject(StudentService);
+  private readonly userService = inject(UserService);
+  private toastService = inject(ToastService);
 
-  @Input() student: StudentResponse | null = null;
-  @Output() studentUpdated = new EventEmitter<StudentResponse>();
+  @Input() userInfo: UserInfo | null = null;
+  @Output() userUpdated = new EventEmitter<UserInfo>();
 
   protected isEditMode = false;
-  protected editStudent: StudentResponse | null = null;
+  protected editUser: UserInfo | null = null;
 
   ngOnChanges(changes: SimpleChanges): void {
     // Keep draft in sync when parent updates student and user is not actively editing
-    if (changes['student'] && !this.isEditMode) {
-      this.resetDraftFromStudent();
+    if (changes['userInfo'] && !this.isEditMode) {
+      this.resetDraftFromUser();
     }
   }
 
   toggleEditMode(): void {
     if (!this.isEditMode) {
-      this.resetDraftFromStudent();
+      this.resetDraftFromUser();
       this.isEditMode = true;
       return;
     }
@@ -36,43 +39,43 @@ export class PersonalInfoCard implements OnChanges {
   }
 
   saveChanges(): void {
-    if (!this.student || !this.editStudent) return;
+    if (!this.userInfo || !this.editUser) return;
 
-    const payload: UpdateStudentRequest = {
-      firstName: this.editStudent.firstName,
-      lastName: this.editStudent.lastName,
-      phoneNumber: this.editStudent.phoneNumber,
-      email: this.editStudent.email,
-      dateOfBirth: this.editStudent.dateOfBirth,
-      bio: this.editStudent.bio,
-      waiverStatus: this.student.waiverStatus,
+    const payload: UserInfo = {
+      firstName: this.editUser.firstName,
+      lastName: this.editUser.lastName,
+      phoneNumber: this.editUser.phoneNumber,
+      email: this.editUser.email,
+      dateOfBirth: this.editUser.dateOfBirth,
+      bio: this.editUser.bio
     };
 
-    this.studentService.update(this.student.id, payload).subscribe({
+    this.userService.updateUser(payload).subscribe({
       next: () => {
-        const updatedStudent: StudentResponse = {
-          ...this.student!,
-          ...this.editStudent!,
-          id: this.student!.id,
+        const updatedUser: UserInfo = {
+          ...this.userInfo!,
+          ...this.editUser!,
         };
 
-        this.student = updatedStudent;
-        this.editStudent = { ...updatedStudent };
-        this.studentUpdated.emit(updatedStudent);
+        this.userInfo = updatedUser;
+        this.editUser = { ...updatedUser };
+        this.userUpdated.emit(updatedUser);
         this.isEditMode = false;
+        
+        this.toastService.success('User information updated successfully');
       },
       error: (err) => {
-        console.error('Failed to update student', err);
+        console.error('Failed to update user', err);
       },
     });
   }
 
   cancelEdit(): void {
-    this.resetDraftFromStudent(); // revert unsaved edits
+    this.resetDraftFromUser(); // revert unsaved edits
     this.isEditMode = false;
   }
 
-  private resetDraftFromStudent(): void {
-    this.editStudent = this.student ? { ...this.student } : null;
+  private resetDraftFromUser(): void {
+    this.editUser = this.userInfo ? { ...this.userInfo } : null;
   }
 }

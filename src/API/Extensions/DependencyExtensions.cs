@@ -28,6 +28,7 @@ using Core.Features.TimeSlots.Read;
 using Core.Features.TimeSlots.Update;
 using Core.Features.Users;
 using Core.Features.Users.Login;
+using Core.Features.Users.Read;
 using Core.Features.Users.Register;
 using Core.Features.Users.Update;
 using Core.Shared;
@@ -94,6 +95,7 @@ public static class DependencyExtensions
         services.AddTransient<LoginUseCase>();
         services.AddValidatorsFromAssemblyContaining<LoginValidator>();
 
+        services.AddTransient<UserReadService>();
         services.AddTransient<UpdateUserUseCase>();
         services.AddValidatorsFromAssemblyContaining<UpdateUserValidator>();
 

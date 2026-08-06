@@ -4,16 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Features.Users.Update;
 
-public class UpdateUserUseCase(IUserService userService)
+public class UpdateUserUseCase(IUserService userService, IUserContext userContext)
 {
-    public async Task<Result<UpdateUserResponse>> ExecuteAsync(string userId, UpdateUserRequest request)
+    public async Task<Result<UpdateUserResponse>> ExecuteAsync( UpdateUserRequest request)
     {
-        var user = await userService.FindById(userId);
+        var userId = userContext.GetUserId();
 
-        if (user is null)
+        if (userId is null)
             return Result.Failure(ErrorType.NotFound, $"User with id {userId} was not found");
 
-        user.FirstName = request.FirstName;
+        var user = await userService.FindById(userId);
+
+        user!.FirstName = request.FirstName;
         user.LastName = request.LastName;
         user.Email = request.Email;
         user.PhoneNumber = request.PhoneNumber;

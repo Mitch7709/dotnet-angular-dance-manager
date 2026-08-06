@@ -5,8 +5,7 @@ import { PersonalInfoCard } from '../personal-info-card/personal-info-card';
 import { StudentService } from '../../../core/services/student-service';
 import { InstructorService } from '../../../core/services/instructor-service';
 import { UserService } from '../../../core/services/user-service';
-import type { StudentResponse } from '../../../types/DTOs/StudentDTOs';
-import { InstructorResponse } from '../../../types/DTOs/InstructorDTOs';
+import { UserInfo } from '../../../types/DTOs/UserDTOs';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,22 +15,27 @@ import { InstructorResponse } from '../../../types/DTOs/InstructorDTOs';
   providers: [StudentService, InstructorService, UserService],
 })
 export class Dashboard implements OnInit {
-  private studentService = inject(StudentService);
   private userService = inject(UserService);
 
   protected user = this.userService.currentUser();
 
   // Signal to hold the student data
-  protected student = signal<StudentResponse | null>(null);
-  protected instructor = signal<InstructorResponse | null>(null);
+  protected personalInfo = signal<UserInfo | null>(null);
 
   ngOnInit(): void {
-    const currentUser = this.userService.currentUser();
-    if (currentUser?.roles.includes('Student')) {
-      // Assuming studentService has a method to get a student by user ID
-      this.studentService.getByUserId(currentUser.userId).subscribe((studentData) => {
-        this.student.set(studentData);
-      });
-    }
+    this.userService.getUserInfo().subscribe({
+      next: (userInfo) => {
+        this.personalInfo.set(userInfo);
+      },
+      error: (error) => {
+        console.error('Error fetching user info:', error);
+      },
+    });
+  }
+
+  userUpdated(updatedUser: UserInfo): void {
+    // console.log('User updated:', updatedUser);
+    this.user!.displayName = `${updatedUser.firstName} ${updatedUser.lastName}`;
+    this.user!.email = updatedUser.email;
   }
 }

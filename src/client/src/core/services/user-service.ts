@@ -29,8 +29,19 @@ export class UserService {
     this.hydrateUserFromStorage();
   }
 
-  updateUser(userId: string, user: UserInfo) {
-    return this.http.put<UserInfo>(`${this.baseUrl}/${userId}`, user).pipe(
+  getUserInfo() {
+    return this.http.get<UserInfo>(`${this.baseUrl}`).pipe(
+      tap((userInfo) => {
+        return userInfo;
+      })
+    );
+  }
+
+  updateUser(user: UserInfo) {
+    return this.http.put<UserInfo>(`${this.baseUrl}`, user).pipe(
+      tap((userInfo) => {
+        return userInfo;
+      })
     );
   }
 

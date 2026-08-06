@@ -1,5 +1,6 @@
 using API.Extensions;
 using Core.Features.Users.Login;
+using Core.Features.Users.Read;
 using Core.Features.Users.Register;
 using Core.Features.Users.Update;
 using Core.Models;
@@ -24,7 +25,9 @@ public class UserModule : IModule
         group.MapPost("/login", Login)
             .Validator<LoginRequest>();
 
-        group.MapPut("/{userId}", UpdateUser)
+        group.MapGet("", GetUserById)
+            .RequireAuthorization();
+        group.MapPut("", UpdateUser)
             .Validator<UpdateUserRequest>()
             .RequireAuthorization();
     }
@@ -66,9 +69,18 @@ public class UserModule : IModule
         };
     }
 
-    private static async Task<Results<Ok<UpdateUserResponse>, NotFound<string>>> UpdateUser(string userId, UpdateUserRequest request, UpdateUserUseCase useCase)
+    private static async Task<Results<Ok<UserResponse>, NotFound<string>>> GetUserById( UserReadService userReadService)
     {
-        var result = await useCase.ExecuteAsync(userId, request);
+        var result = await userReadService.GetByIdAsync();
+
+        return result.IsSuccess
+            ? TypedResults.Ok(result.Value)
+            : TypedResults.NotFound(result.ErrorMessage);
+    }
+
+    private static async Task<Results<Ok<UpdateUserResponse>, NotFound<string>>> UpdateUser(UpdateUserRequest request, UpdateUserUseCase useCase)
+    {
+        var result = await useCase.ExecuteAsync(request);
         return result.IsSuccess
             ? TypedResults.Ok(result.Value)
             : TypedResults.NotFound(result.ErrorMessage);
