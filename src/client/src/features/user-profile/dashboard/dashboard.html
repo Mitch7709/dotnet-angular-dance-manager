@@ -9,6 +9,8 @@
   <app-quick-links></app-quick-links>
 </div>
 
-<div class="grid md:grid-cols-2 mt-10">
+<div class="grid gap-6 md:grid-cols-2 mt-10">
   <app-personal-info-card [userInfo]="personalInfo()" (userUpdated)="userUpdated($event)"></app-personal-info-card>
+
+  <app-waiver-card [studentInfo]="studentInfo()"></app-waiver-card>
 </div>

@@ -43,10 +43,11 @@ export type UserInfo = {
   phoneNumber: string;
   dateOfBirth?: string;
   bio?: string;
+  studentUser?: StudentUser;
+  instructorUser?: InstructorUser;
 }
 
 export type StudentUser = {
-  dateOfBirth: string;
   waiverStatus: string;
 }
 

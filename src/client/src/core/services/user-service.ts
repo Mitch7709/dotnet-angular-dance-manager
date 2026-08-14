@@ -71,7 +71,7 @@ export class UserService {
         this.setCurrentUser(response);
 
         sessionStorage.setItem('token', response.token);
-        console.log(this.currentUser());
+        // console.log(this.currentUser());
       }),
     );
   }

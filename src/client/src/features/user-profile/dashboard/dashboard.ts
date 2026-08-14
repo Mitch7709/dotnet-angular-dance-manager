@@ -5,37 +5,76 @@ import { PersonalInfoCard } from '../personal-info-card/personal-info-card';
 import { StudentService } from '../../../core/services/student-service';
 import { InstructorService } from '../../../core/services/instructor-service';
 import { UserService } from '../../../core/services/user-service';
-import { UserInfo } from '../../../types/DTOs/UserDTOs';
+import { User, UserInfo } from '../../../types/DTOs/UserDTOs';
+import { WaiverCard } from '../waiver-card/waiver-card';
+import { StudentResponse } from '../../../types/DTOs/StudentDTOs';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [ProfileHeader, QuickLinks, PersonalInfoCard],
+  imports: [ProfileHeader, QuickLinks, PersonalInfoCard, WaiverCard],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
   providers: [StudentService, InstructorService, UserService],
 })
 export class Dashboard implements OnInit {
   private userService = inject(UserService);
+  private studentService = inject(StudentService);
 
   protected user = this.userService.currentUser();
 
-  // Signal to hold the student data
   protected personalInfo = signal<UserInfo | null>(null);
+  protected studentInfo = signal<StudentResponse | null>(null);
 
   ngOnInit(): void {
-    this.userService.getUserInfo().subscribe({
-      next: (userInfo) => {
-        this.personalInfo.set(userInfo);
-      },
-      error: (error) => {
-        console.error('Error fetching user info:', error);
-      },
-    });
+    const user = this.user;
+
+    if (user !== null) {
+      this.userService.getUserInfo().subscribe({
+        next: (userInfo) => {
+          this.personalInfo.set(userInfo);
+
+          if (user.roles.includes('Student')) {
+            userInfo.studentUser = { waiverStatus: '' };
+
+            this.studentService.getByUserId(user.userId).subscribe({
+              next: (response) => {
+                // Handle student info here
+                userInfo.studentUser!.waiverStatus = response.waiverStatus;
+                this.studentInfo.set(response);
+              },
+              error: (error) => {
+                console.error('Error fetching student info:', error);
+              },
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching user info:', error);
+        },
+      });
+    }
   }
 
   userUpdated(updatedUser: UserInfo): void {
     // console.log('User updated:', updatedUser);
-    this.user!.displayName = `${updatedUser.firstName} ${updatedUser.lastName}`;
-    this.user!.email = updatedUser.email;
+    var user = this.userService.currentUser();
+
+    if (user !== null) {
+      user.displayName = `${updatedUser.firstName} ${updatedUser.lastName}`;
+      user.email = updatedUser.email;
+    }
+    this.personalInfo.set(updatedUser);
+
+    //Manually bind user properties to studentInfo if user is a student
+    if (user !== null && user.roles.includes('Student')) {
+      const currentStudentInfo = this.studentInfo();
+      if (currentStudentInfo) {
+        currentStudentInfo.email = updatedUser.email;
+        currentStudentInfo.firstName = updatedUser.firstName;
+        currentStudentInfo.lastName = updatedUser.lastName;
+        currentStudentInfo.phoneNumber = updatedUser.phoneNumber;
+        this.studentInfo.set(currentStudentInfo);
+      }
+    }
   }
 }

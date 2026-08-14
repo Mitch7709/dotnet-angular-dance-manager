@@ -6,7 +6,7 @@ namespace Core.Features.Users.Update;
 
 public class UpdateUserUseCase(IUserService userService, IUserContext userContext)
 {
-    public async Task<Result<UpdateUserResponse>> ExecuteAsync( UpdateUserRequest request)
+    public async Task<Result<UpdateUserResponse>> ExecuteAsync(UpdateUserRequest request)
     {
         var userId = userContext.GetUserId();
 
