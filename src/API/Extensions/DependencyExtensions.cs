@@ -22,6 +22,7 @@ using Core.Features.Students.Create;
 using Core.Features.Students.Delete;
 using Core.Features.Students.Read;
 using Core.Features.Students.Update;
+using Core.Features.Students.Update.UpdateWaiver;
 using Core.Features.TimeSlots.Create;
 using Core.Features.TimeSlots.Delete;
 using Core.Features.TimeSlots.Read;
@@ -47,9 +48,11 @@ public static class DependencyExtensions
 
         services.AddTransient<CreateStudentUseCase>();
         services.AddTransient<UpdateStudentUseCase>();
+        services.AddTransient<UpdateWaiverUseCase>();
         services.AddTransient<StudentReadService>();
         services.AddTransient<DeleteStudentUseCase>();
         services.AddValidatorsFromAssemblyContaining<UpdateStudentValidator>();
+        services.AddValidatorsFromAssemblyContaining<UpdateWaiverValidator>();
 
         services.AddTransient<CreateInstructorUseCase>();
         services.AddTransient<UpdateInstructorUseCase>();

@@ -3,6 +3,7 @@ import { UserInfo } from '../../../types/DTOs/UserDTOs';
 import { UserService } from '../../../core/services/user-service';
 import { StudentService } from '../../../core/services/student-service';
 import { StudentResponse } from '../../../types/DTOs/StudentDTOs';
+import { ToastService } from '../../../core/services/toast-service';
 
 @Component({
   selector: 'app-waiver-card',
@@ -12,10 +13,25 @@ import { StudentResponse } from '../../../types/DTOs/StudentDTOs';
 })
 export class WaiverCard implements OnInit {
   protected studentService = inject(StudentService);
+  protected toastService = inject(ToastService);
 
   @Input() studentInfo: StudentResponse | null = null;
 
   ngOnInit(): void {
-    
+
+  }
+
+  SignWaiver(): void {
+    if (!this.studentInfo) return;
+
+    this.studentService.updateWaiverStatus(this.studentInfo.id, 'Signed').subscribe({
+      next: (response) => {
+        this.studentInfo!.waiverStatus = response.waiverStatus;
+        this.toastService.success('Waiver signed successfully');
+      },
+      error: (error) => {
+        console.error('Error signing waiver:', error);
+      }
+    });
   }
 }

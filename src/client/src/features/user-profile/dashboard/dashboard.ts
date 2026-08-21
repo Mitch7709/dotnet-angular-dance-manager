@@ -34,7 +34,7 @@ export class Dashboard implements OnInit {
           this.personalInfo.set(userInfo);
 
           if (user.roles.includes('Student')) {
-            userInfo.studentUser = { waiverStatus: '' };
+            userInfo.studentUser = { waiverStatus: '', id: 0 };
 
             this.studentService.getByUserId(user.userId).subscribe({
               next: (response) => {

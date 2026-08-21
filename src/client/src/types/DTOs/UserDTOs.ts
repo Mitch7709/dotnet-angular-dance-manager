@@ -48,11 +48,12 @@ export type UserInfo = {
 }
 
 export type StudentUser = {
+  id: number;
   waiverStatus: string;
 }
 
 export type InstructorUser = {
-  bio: string;
+  // id: number;
   qualifiedClasses: string[];
 }
 

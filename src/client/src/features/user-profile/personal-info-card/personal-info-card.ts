@@ -61,11 +61,12 @@ export class PersonalInfoCard implements OnChanges {
         this.editUser = { ...updatedUser };
         this.userUpdated.emit(updatedUser);
         this.isEditMode = false;
-        
+
         this.toastService.success('User information updated successfully');
       },
       error: (err) => {
-        console.error('Failed to update user', err);
+        console.error('Failed to update user', err.error.errors);
+        this.toastService.error('Failed to update user information');
       },
     });
   }

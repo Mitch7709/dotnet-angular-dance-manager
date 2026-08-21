@@ -3,6 +3,7 @@ using Core.Features.Students.Create;
 using Core.Features.Students.Delete;
 using Core.Features.Students.Read;
 using Core.Features.Students.Update;
+using Core.Features.Students.Update.UpdateWaiver;
 using Core.Features.Users.Register;
 using Core.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -22,7 +23,12 @@ public class StudentModule : IModule
         group.MapGet("/me", GetStudentByUserId);
 
         group.MapPut("/{id}", UpdateStudent)
+            .RequireAuthorization()
             .Validator<UpdateStudentRequest>();
+        group.MapPut("/waiver/{id}", UpdateWaiver)
+            .RequireAuthorization()
+            .Validator<UpdateWaiverStatusRequest>();
+
 
         group.MapDelete("/{id}", DeleteStudent);
     }
@@ -50,6 +56,14 @@ public class StudentModule : IModule
     }
 
     private static async Task<Results<Ok<UpdateStudentResponse>, NotFound<string>>> UpdateStudent(int id, UpdateStudentRequest request, UpdateStudentUseCase useCase)
+    {
+        var result = await useCase.ExecuteAsync(id, request);
+        return result.IsSuccess
+            ? TypedResults.Ok(result.Value)
+            : TypedResults.NotFound(result.ErrorMessage);
+    }
+
+    private static async Task<Results<Ok<UpdateWaiverStatusResponse>, NotFound<string>>> UpdateWaiver(int id, UpdateWaiverStatusRequest request, UpdateWaiverUseCase useCase)
     {
         var result = await useCase.ExecuteAsync(id, request);
         return result.IsSuccess
