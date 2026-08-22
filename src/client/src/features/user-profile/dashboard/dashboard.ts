@@ -7,11 +7,13 @@ import { InstructorService } from '../../../core/services/instructor-service';
 import { UserService } from '../../../core/services/user-service';
 import { User, UserInfo } from '../../../types/DTOs/UserDTOs';
 import { WaiverCard } from '../waiver-card/waiver-card';
+import { QualifiedClasses } from '../qualified-classes/qualified-classes';
 import { StudentResponse } from '../../../types/DTOs/StudentDTOs';
+import { InstructorResponse } from '../../../types/DTOs/InstructorDTOs';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [ProfileHeader, QuickLinks, PersonalInfoCard, WaiverCard],
+  imports: [ProfileHeader, QuickLinks, PersonalInfoCard, WaiverCard, QualifiedClasses],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
   providers: [StudentService, InstructorService, UserService],
@@ -19,11 +21,13 @@ import { StudentResponse } from '../../../types/DTOs/StudentDTOs';
 export class Dashboard implements OnInit {
   private userService = inject(UserService);
   private studentService = inject(StudentService);
+  private instructorService = inject(InstructorService);
 
   protected user = this.userService.currentUser();
 
   protected personalInfo = signal<UserInfo | null>(null);
   protected studentInfo = signal<StudentResponse | null>(null);
+  protected instructorInfo = signal<InstructorResponse | null>(null);
 
   ngOnInit(): void {
     const user = this.user;
@@ -31,6 +35,7 @@ export class Dashboard implements OnInit {
     if (user !== null) {
       this.userService.getUserInfo().subscribe({
         next: (userInfo) => {
+          console.log('User info fetched:', userInfo);
           this.personalInfo.set(userInfo);
 
           if (user.roles.includes('Student')) {
@@ -44,6 +49,19 @@ export class Dashboard implements OnInit {
               },
               error: (error) => {
                 console.error('Error fetching student info:', error);
+              },
+            });
+          }
+          else if (user.roles.includes('Instructor')) {
+            userInfo.instructorUser = { qualifiedClasses: [] };
+
+            this.instructorService.getByUserId(user.userId).subscribe({
+              next: (response) => {
+                userInfo.instructorUser!.qualifiedClasses = response.qualifiedClasses;
+                this.instructorInfo.set(response);
+              },
+              error: (error) => {
+                console.error('Error fetching instructor info:', error);
               },
             });
           }

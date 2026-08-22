@@ -21,6 +21,10 @@ export class WaiverCard implements OnInit {
 
   }
 
+  get canSignWaiver(): boolean {
+    return this.studentInfo?.waiverStatus !== 'Signed';
+  }
+
   SignWaiver(): void {
     if (!this.studentInfo) return;
 

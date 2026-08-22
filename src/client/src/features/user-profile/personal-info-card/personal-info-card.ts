@@ -1,6 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { StudentResponse, UpdateStudentRequest } from '../../../types/DTOs/StudentDTOs';
 import { UserService } from '../../../core/services/user-service';
 import { UserInfo } from '../../../types/DTOs/UserDTOs';
 import { ToastService } from '../../../core/services/toast-service';

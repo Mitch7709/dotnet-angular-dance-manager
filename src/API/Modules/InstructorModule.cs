@@ -16,6 +16,8 @@ public class InstructorModule : IModule
 
         group.MapGet("", GetInstructors);
         group.MapGet("/{id}", GetInstructorById);
+        group.MapGet("/me", GetInstructorByUserId);
+
 
         group.MapPut("/{id}", UpdateInstructor)
             .Validator<UpdateInstructorRequest>();
@@ -32,6 +34,14 @@ public class InstructorModule : IModule
     private static async Task<Results<Ok<InstructorResponse>, NotFound<string>>> GetInstructorById(int id, InstructorReadService service)
     {
         var result = await service.GetByIdAsync(id);
+        return result.IsSuccess
+            ? TypedResults.Ok(result.Value)
+            : TypedResults.NotFound(result.ErrorMessage);
+    }
+
+    private static async Task<Results<Ok<InstructorResponse>, NotFound<string>>> GetInstructorByUserId(string userId, InstructorReadService service)
+    {
+        var result = await service.GetByUserIdAsync(userId);
         return result.IsSuccess
             ? TypedResults.Ok(result.Value)
             : TypedResults.NotFound(result.ErrorMessage);

@@ -5,7 +5,7 @@ import { ClasstypeService } from '../../core/services/classtype-service';
 import { InstructorService } from '../../core/services/instructor-service';
 import { TimeslotService } from '../../core/services/timeslot-service';
 import { ClassTypeResponse } from '../../types/DTOs/ClassTypeDTOs';
-import { Instructor } from '../../types/DTOs/InstructorDTOs';
+import { InstructorResponse } from '../../types/DTOs/InstructorDTOs';
 import { SessionRequest, SessionResponse } from '../../types/DTOs/SessionDTOs';
 import { TimeSlotResponse } from '../../types/DTOs/TimeSlotDTOs';
 import { FormsModule } from '@angular/forms';
@@ -28,7 +28,7 @@ export class Session {
 
   sessions = signal<SessionResponse[] | null>(null);
   classTypes = signal<ClassTypeResponse[] | null>(null);
-  instructors = signal<Instructor[] | null>(null);
+  instructors = signal<InstructorResponse[] | null>(null);
   timeSlots = signal<TimeSlotResponse[] | null>(null);
 
   selectedSession = signal<SessionRequest | null>(null);

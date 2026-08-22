@@ -5,7 +5,7 @@ import { ToastService } from '../../core/services/toast-service';
 import { getErrorMessage } from '../../core/utils/error-handler';
 import { FormsModule } from '@angular/forms';
 import { InstructorService } from '../../core/services/instructor-service';
-import { Instructor } from '../../types/DTOs/InstructorDTOs';
+import { InstructorResponse } from '../../types/DTOs/InstructorDTOs';
 
 @Component({
   selector: 'app-classtype',
@@ -19,11 +19,11 @@ export class Classtype {
   private toastService = inject(ToastService);
 
   classTypes = signal<ClassTypeResponse[] | null>(null);
-  instructors = signal<Instructor[] | null>(null);
+  instructors = signal<InstructorResponse[] | null>(null);
   selectedClassType = signal<ClassTypeRequest | null>(null);
   originalClassType = signal<ClassTypeResponse | null>(null);
 
-  instructorsForSelectedClassType = signal<Instructor[]>([]);
+  instructorsForSelectedClassType = signal<InstructorResponse[]>([]);
 
   protected isCreating = signal(false);
 
