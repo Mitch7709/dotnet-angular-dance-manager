@@ -10,6 +10,6 @@ import { Nav } from "../layout/nav/nav";
 })
 export class App {
   protected readonly title = 'Welcome to The Grove!'
-  
+
   protected router = inject(Router);
 }

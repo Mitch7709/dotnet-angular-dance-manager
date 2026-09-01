@@ -1,8 +1,5 @@
-using API.Configuration;
 using API.Extensions;
 using Infrastructure.Database;
-using Infrastructure.Image;
-using Microsoft.EntityFrameworkCore;
 
 namespace API;
 

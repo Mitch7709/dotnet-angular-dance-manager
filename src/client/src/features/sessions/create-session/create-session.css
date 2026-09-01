@@ -1,0 +1,17 @@
+.calendar-container {
+  padding: 20px;
+  min-height: 600px;
+}
+
+:host ::ng-deep .fc {
+  font-family: inherit;
+}
+
+:host ::ng-deep .fc-button-primary {
+  background-color: #3788d8;
+  border-color: #3788d8;
+}
+
+:host ::ng-deep .fc-button-primary:hover {
+  background-color: #2c5aa0;
+}

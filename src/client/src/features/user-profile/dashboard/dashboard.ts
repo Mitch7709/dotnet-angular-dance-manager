@@ -35,7 +35,7 @@ export class Dashboard implements OnInit {
     if (user !== null) {
       this.userService.getUserInfo().subscribe({
         next: (userInfo) => {
-          console.log('User info fetched:', userInfo);
+          // console.log('User info fetched:', userInfo);
           this.personalInfo.set(userInfo);
 
           if (user.roles.includes('Student')) {
