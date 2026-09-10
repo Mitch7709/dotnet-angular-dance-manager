@@ -1,3 +1,82 @@
 <div class="calendar-container">
   <full-calendar [options]="calendarOptions"></full-calendar>
 </div>
+
+<dialog id="sessionDialog" class="modal">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="font-bold text-lg">Create Session</h3>
+    <p class="py-4">Fill in the details below to create a new session.</p>
+
+    <form [formGroup]="sessionForm" (ngSubmit)="createSession()">
+      <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text">Class Type</span>
+              </div>
+              <select
+                id="classType"
+                class="input input-bordered w-full"
+                formControlName="classType"
+              >
+                @for (classType of classTypes; track $index) {
+                  <option [value]="classType.id">
+                    {{ classType.name }}
+                  </option>
+                }
+              </select>
+            </label>
+          </div>
+          <div>
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text">Price</span>
+              </div>
+              <input
+                id="price"
+                type="number"
+                step="0.01"
+                class="input input-bordered w-full"
+                formControlName="price"
+              />
+            </label>
+          </div>
+          <div>
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text">Date</span>
+              </div>
+              <input
+                id="date"
+                readonly
+                type="text"
+                class="input input-bordered w-full"
+                formControlName="date"
+                readonly
+              />
+            </label>
+          </div>
+          <div>
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text">Status</span>
+              </div>
+              <input
+                id="status"
+                type="text"
+                class="input input-bordered w-full"
+                formControlName="status"
+                readonly
+              />
+            </label>
+          </div>
+      </div>
+      <div class="modal-action">
+        <button class="btn btn-primary" type="submit">Save</button>
+      </div>
+      </form>
+    </div>
+</dialog>

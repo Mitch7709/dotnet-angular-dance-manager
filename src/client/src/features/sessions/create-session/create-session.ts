@@ -1,21 +1,48 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FullCalendarModule, CalendarOptions, FullCalendarComponent } from '@fullcalendar/angular';
 import themePlugin from '@fullcalendar/angular/themes/monarch';
 import timeGridPlugin from '@fullcalendar/angular/timegrid';
 import { TimeslotService } from '../../../core/services/timeslot-service';
+import { ClasstypeService } from '../../../core/services/classtype-service';
 import { TimeSlotResponse } from '../../../types/DTOs/TimeSlotDTOs';
+import { ClassTypeResponse } from '../../../types/DTOs/ClassTypeDTOs';
+import { InstructorService } from '../../../core/services/instructor-service';
+import { UserService } from '../../../core/services/user-service';
+import { SessionService } from '../../../core/services/session-service';
+import { SessionRequest } from '../../../types/DTOs/SessionDTOs';
 
 @Component({
   selector: 'app-create-session',
-  imports: [FullCalendarModule],
+  imports: [FullCalendarModule, ReactiveFormsModule],
   templateUrl: './create-session.html',
   styleUrl: './create-session.css',
 })
 export class CreateSession implements OnInit {
   @ViewChild(FullCalendarComponent) calendarComponent?: FullCalendarComponent;
 
+  private fb = inject(FormBuilder);
+  protected sessionForm: FormGroup;
+
+  private readonly sessionService = inject(SessionService);
   private readonly timeslotService = inject(TimeslotService);
+  private readonly classtypeService = inject(ClasstypeService);
+  private readonly instructorService = inject(InstructorService);
+  private readonly userService = inject(UserService);
+
+  protected classTypes: ClassTypeResponse[] = [];
   protected timeSlots: TimeSlotResponse[] = [];
+
+  constructor() {
+    this.sessionForm = this.fb.group({
+      classType: [''],
+      timeSlot: [''],
+      price: [0.0],
+      date: [''],
+      instructorId: [0],
+      status: ['Scheduled'],
+    });
+  }
 
   calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
@@ -32,31 +59,38 @@ export class CreateSession implements OnInit {
     slotMaxTime: '17:00:00',
     height: 'auto',
     businessHours: {
-      daysOfWeek: [1, 2, 3, 4, 5], // Monday - Friday
-      startTime: '09:00', // 9am
-      endTime: '17:00', // 5pm
+      daysOfWeek: [1, 2, 3, 4, 5],
+      startTime: '09:00',
+      endTime: '17:00',
     },
-    events: [
+    eventClick: (info) => {
+      // console.log('Event clicked:', info.event);
 
-    ],
+      var slotDetails = info.event.extendedProps;
+      // console.log('Slot details:', slotDetails);
+
+      this.sessionForm.patchValue({
+        classType: this.classTypes.length > 0 ? this.classTypes[0].id : '',
+        timeSlot: slotDetails['slotId'],
+        price: 0.0,
+        date: info.event.start?.toISOString().split('T')[0],
+        status: 'Scheduled',
+      });
+      // console.log('Dialog options:', this.sessionForm.value);
+      const sessionDialog = document.getElementById('sessionDialog') as HTMLDialogElement;
+      if (sessionDialog) {
+        sessionDialog.showModal();
+      }
+    },
   };
 
   ngOnInit(): void {
-    // Initialization logic here
-
-    // const dummyEvents = [
-    //   { title: 'Available Slot', daysOfWeek: [1], startTime: '12:00:00', endTime: '12:49:00', color: '#3788d8' },
-    //   { title: 'Available Slot', daysOfWeek: [2], startTime: '14:00:00', endTime: '15:00:00', color: '#3788d8' },
-    // ];
-
-    // this.calendarOptions.events = dummyEvents;
+    this.getInstructorId();
 
     this.timeslotService.getAll().subscribe({
       next: (slots) => {
         this.timeSlots = slots;
         const mappedEvents = this.mapTimeSlotsToEvents(slots);
-        // this.calendarOptions.events = this.mapTimeSlotsToEvents(slots);
-        console.log(mappedEvents);
 
         if (this.calendarComponent) {
           const calendarApi = this.calendarComponent.getApi();
@@ -71,6 +105,57 @@ export class CreateSession implements OnInit {
         }
       },
     });
+
+    this.classtypeService.getAll().subscribe({
+      next: (classTypes) => {
+        this.classTypes = classTypes;
+      },
+    });
+  }
+
+  createSession() {
+    if (this.sessionForm.valid) {
+      const sessionData = this.sessionForm.value;
+
+      var sessionRequest : SessionRequest = {
+        classTypeId: sessionData.classType,
+        timeSlotId: sessionData.timeSlot,
+        price: sessionData.price,
+        sessionDate: sessionData.date,
+        status: sessionData.status,
+        instructorId: sessionData.instructorId,
+      }
+      // console.log('Session request:', sessionRequest);
+
+      this.sessionService.create(sessionRequest).subscribe({
+        next: (response) => {
+          console.log('Session created successfully:', response);
+
+          const sessionDialog = document.getElementById('sessionDialog') as HTMLDialogElement;
+          if (sessionDialog) {
+            sessionDialog.close();
+          }
+        },
+        error: (error) => {
+          console.error('Error creating session:', error);
+        }
+      });
+    }
+  }
+
+  private getInstructorId() {
+    var currentUser = this.userService.currentUser();
+    console.log('Current user:', currentUser);
+    if (currentUser) {
+      this.instructorService.getByUserId(currentUser.userId).subscribe({
+        next: (response) => {
+          this.sessionForm.patchValue({
+            instructorId: response.id,
+          });
+          console.log('Updated instructor ID:', this.sessionForm.value.instructorId);
+        }
+      });
+    }
   }
 
   private mapTimeSlotsToEvents(slots: TimeSlotResponse[]) {
