@@ -1,1 +1,52 @@
-<p>booking works!</p>
+<div class="p-8 mx-auto">
+  <!-- Header Section -->
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold text-gray-800 mb-2">Book a Class</h2>
+    <p class="text-gray-500">Select an available class session from the calendar below</p>
+  </div>
+
+  <!-- Calendar Section -->
+  <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+
+  <!-- Session Details Modal -->
+  <dialog id="sessionDetailsDialog" class="modal">
+    <div class="modal-box">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <h3 class="font-bold text-lg mb-4">Session Details</h3>
+
+      @if (selectedSession) {
+        <div class="space-y-4 mb-6">
+          <div class="flex justify-between items-center pb-3 border-b border-gray-200">
+            <span class="font-semibold text-gray-700">Class Type:</span>
+            <span class="text-gray-900">{{ selectedSession.classType }}</span>
+          </div>
+          <div class="flex justify-between items-center pb-3 border-b border-gray-200">
+            <span class="font-semibold text-gray-700">Instructor:</span>
+            <span class="text-gray-900">{{ selectedSession.instructor }}</span>
+          </div>
+          <div class="flex justify-between items-center pb-3 border-b border-gray-200">
+            <span class="font-semibold text-gray-700">Date & Time:</span>
+            <span class="text-gray-900">{{ selectedSession.dateTime }}</span>
+          </div>
+          <div class="flex justify-between items-center pb-3 border-b border-gray-200">
+            <span class="font-semibold text-gray-700">Price:</span>
+            <span class="text-gray-900">${{ selectedSession.price }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="font-semibold text-gray-700">Available Spots:</span>
+            <span class="text-gray-900">{{ selectedSession.availableSpots }}/{{ selectedSession.totalSeats }}</span>
+          </div>
+        </div>
+
+        <div class="modal-action">
+          <button class="btn btn-primary" (click)="bookSession()">Book Session</button>
+          <button class="btn" type="submit" (click)="closeSessionDialog()">Cancel</button>
+        </div>
+      }
+    </div>
+  </dialog>
+</div>

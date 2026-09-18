@@ -273,6 +273,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("TimeSlotId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TotalSeats")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClassTypeId");

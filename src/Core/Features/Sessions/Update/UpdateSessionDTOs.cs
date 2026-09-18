@@ -8,7 +8,9 @@ public record UpdateSessionRequest(
     int TimeSlotId,
     decimal Price,
     DateOnly SessionDate,
-    string Status
+    string Status,
+    int TotalSeats
+
 );
 
 public record UpdateSessionResponse(
@@ -18,5 +20,6 @@ public record UpdateSessionResponse(
     int TimeSlotId,
     decimal Price,
     DateOnly SessionDate,
-    SessionStatus Status
+    SessionStatus Status,
+    int TotalSeats
 );

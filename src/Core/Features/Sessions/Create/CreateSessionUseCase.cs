@@ -54,7 +54,8 @@ public class CreateSessionUseCase(IDbContext dbContext)
             TimeSlotId = request.TimeSlotId,
             Price = request.Price,
             SessionDate = request.SessionDate,
-            Status = request.Status
+            Status = request.Status,
+            TotalSeats = request.TotalSeats
         };
 
         dbContext.Set<Session>().Add(session);
@@ -67,7 +68,8 @@ public class CreateSessionUseCase(IDbContext dbContext)
             session.TimeSlotId,
             session.Price,
             session.SessionDate,
-            session.Status
+            session.Status,
+            session.TotalSeats
         );
     }
 }

@@ -8,7 +8,9 @@ public record CreateSessionRequest(
     int TimeSlotId,
     decimal Price,
     DateOnly SessionDate,
-    SessionStatus Status
+    SessionStatus Status,
+    int TotalSeats
+
 );
 
 public record CreateSessionResponse(
@@ -18,5 +20,6 @@ public record CreateSessionResponse(
     int TimeSlotId,
     decimal Price,
     DateOnly SessionDate,
-    SessionStatus Status
+    SessionStatus Status,
+    int TotalSeats
 );

@@ -4,15 +4,22 @@ export type SessionRequest = {
     timeSlotId: number;
     price: number;
     sessionDate: string;
-    status: string; 
+    status: string;
+    totalSeats: number;
 }
 
 export type SessionResponse = {
     id: number;
     classTypeId: number;
+    classTypeName: string;
     instructorId: number;
+    instructorName: string;
     timeSlotId: number;
+    startTime: string;
+    duration: number;
+    dayOfWeek: string;
     price: number;
     sessionDate: string;
-    status: string; 
+    status: string;
+    totalSeats: number;
 }

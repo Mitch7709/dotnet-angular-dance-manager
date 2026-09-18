@@ -48,6 +48,7 @@ public class UpdateSessionUseCase(IDbContext dbContext)
         session.Price = request.Price;
         session.SessionDate = request.SessionDate;
         session.Status = sessionStatusParsed;
+        session.TotalSeats = request.TotalSeats;
 
         await dbContext.SaveChangesAsync();
 
@@ -58,7 +59,8 @@ public class UpdateSessionUseCase(IDbContext dbContext)
             session.TimeSlotId,
             session.Price,
             session.SessionDate,
-            session.Status
+            session.Status,
+            session.TotalSeats
         );
     }
 }

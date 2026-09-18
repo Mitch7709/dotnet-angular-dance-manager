@@ -16,6 +16,9 @@ export class SessionService {
   getById(id: number) {
     return this.http.get<SessionResponse>(`${this.baseUrl}/${id}`);
   }
+  getUpcoming() {
+    return this.http.get<SessionResponse[]>(`${this.baseUrl}/upcoming`);
+  }
   create(body: SessionRequest) {
     return this.http.post<SessionResponse>(this.baseUrl, body);
   }

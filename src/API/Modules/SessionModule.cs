@@ -14,18 +14,22 @@ namespace API.Modules
         {
             var group = app.MapGroup("/sessions")
                 .WithTags("Sessions")
-                .RequireAuthorization(Security.NonStudentPolicy);
+                .RequireAuthorization();
 
             group.MapGet("", GetSessions);
             group.MapGet("/{id}", GetSessionById);
+            group.MapGet("/upcoming", GetUpcomingSessions);
 
             group.MapPost("", CreateSession)
-                .Validator<CreateSessionRequest>();
+                .Validator<CreateSessionRequest>()
+                .RequireAuthorization(Security.NonStudentPolicy);
 
             group.MapPut("/{id}", UpdateSession)
-                .Validator<UpdateSessionRequest>();
+                .Validator<UpdateSessionRequest>()
+                .RequireAuthorization(Security.NonStudentPolicy);
 
-            group.MapDelete("/{id}", DeleteSession);
+            group.MapDelete("/{id}", DeleteSession)
+                .RequireAuthorization(Security.NonStudentPolicy);
         }
 
         private static async Task<Ok<IReadOnlyList<SessionResponse>>> GetSessions(int? page, int? pageSize, SessionReadService service)
@@ -37,6 +41,14 @@ namespace API.Modules
         private static async Task<Results<Ok<SessionResponse>, NotFound<string>>> GetSessionById(int id, SessionReadService service)
         {
             var result = await service.GetByIdAsync(id);
+            return result.IsSuccess
+                ? TypedResults.Ok(result.Value)
+                : TypedResults.NotFound(result.ErrorMessage);
+        }
+
+        private static async Task<Results<Ok<IReadOnlyList<SessionResponse>>, NotFound<string>>> GetUpcomingSessions(SessionReadService service)
+        {
+            var result = await service.GetUpcomingAsync();
             return result.IsSuccess
                 ? TypedResults.Ok(result.Value)
                 : TypedResults.NotFound(result.ErrorMessage);

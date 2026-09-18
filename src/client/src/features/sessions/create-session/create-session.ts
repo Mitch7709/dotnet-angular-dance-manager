@@ -41,6 +41,7 @@ export class CreateSession implements OnInit {
       date: [''],
       instructorId: [0],
       status: ['Scheduled'],
+      totalSeats: [0],
     });
   }
 
@@ -124,6 +125,7 @@ export class CreateSession implements OnInit {
         sessionDate: sessionData.date,
         status: sessionData.status,
         instructorId: sessionData.instructorId,
+        totalSeats: sessionData.totalSeats,
       }
       // console.log('Session request:', sessionRequest);
 

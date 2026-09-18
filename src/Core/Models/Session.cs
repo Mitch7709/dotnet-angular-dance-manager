@@ -19,14 +19,13 @@ public class Session : BaseEntity
     public decimal Price { get; set; }
     public DateOnly SessionDate { get; set; }
     public SessionStatus Status { get; set; }
+    public int TotalSeats { get; set; }
 
     public ICollection<Booking> Bookings { get; set; } = [];
 
-    public DateOnly FindClosestDateFromTimeSlot()
+    public int GetAvailableSeats()
     {
-        var today = DateOnly.FromDateTime(DateTime.Today);
-        var daysUntilNextSession = ((int)TimeSlot.DayOfWeek - (int)today.DayOfWeek + 7) % 7;
-        return today.AddDays(daysUntilNextSession);
+        return TotalSeats - Bookings.Count;
     }
 }
 
