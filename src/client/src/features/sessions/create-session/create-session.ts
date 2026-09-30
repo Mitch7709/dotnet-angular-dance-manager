@@ -11,6 +11,7 @@ import { InstructorService } from '../../../core/services/instructor-service';
 import { UserService } from '../../../core/services/user-service';
 import { SessionService } from '../../../core/services/session-service';
 import { SessionRequest } from '../../../types/DTOs/SessionDTOs';
+import { ToastService } from '../../../core/services/toast-service';
 
 @Component({
   selector: 'app-create-session',
@@ -20,6 +21,8 @@ import { SessionRequest } from '../../../types/DTOs/SessionDTOs';
 })
 export class CreateSession implements OnInit {
   @ViewChild(FullCalendarComponent) calendarComponent?: FullCalendarComponent;
+
+  private toastService = inject(ToastService);
 
   private fb = inject(FormBuilder);
   protected sessionForm: FormGroup;
@@ -118,7 +121,7 @@ export class CreateSession implements OnInit {
     if (this.sessionForm.valid) {
       const sessionData = this.sessionForm.value;
 
-      var sessionRequest : SessionRequest = {
+      var sessionRequest: SessionRequest = {
         classTypeId: sessionData.classType,
         timeSlotId: sessionData.timeSlot,
         price: sessionData.price,
@@ -126,12 +129,13 @@ export class CreateSession implements OnInit {
         status: sessionData.status,
         instructorId: sessionData.instructorId,
         totalSeats: sessionData.totalSeats,
-      }
+      };
       // console.log('Session request:', sessionRequest);
 
       this.sessionService.create(sessionRequest).subscribe({
         next: (response) => {
-          console.log('Session created successfully:', response);
+          // console.log('Session created successfully:', response);
+          this.toastService.success('Session created successfully');
 
           const sessionDialog = document.getElementById('sessionDialog') as HTMLDialogElement;
           if (sessionDialog) {
@@ -139,8 +143,9 @@ export class CreateSession implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Error creating session:', error);
-        }
+          // console.error('Error creating session:', error);
+          this.toastService.error('Error creating session');
+        },
       });
     }
   }
@@ -155,7 +160,7 @@ export class CreateSession implements OnInit {
             instructorId: response.id,
           });
           console.log('Updated instructor ID:', this.sessionForm.value.instructorId);
-        }
+        },
       });
     }
   }

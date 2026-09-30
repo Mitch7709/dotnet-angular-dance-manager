@@ -21,6 +21,11 @@ public class CreateBookingUseCase(IDbContext dbContext)
             return Result.Failure(ErrorType.ValidationError, $"Session with id {request.SessionId} is not available for booking.");
         }
 
+        if (session.SessionDate < DateOnly.FromDateTime(DateTime.UtcNow))
+        {
+            return Result.Failure(ErrorType.ValidationError, $"Session with id {request.SessionId} has already occurred.");
+        }
+
         var studentExists = await dbContext.Set<Student>()
             .AnyAsync(s => s.Id == request.StudentId);
 

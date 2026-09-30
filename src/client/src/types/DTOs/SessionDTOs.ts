@@ -22,4 +22,5 @@ export type SessionResponse = {
     sessionDate: string;
     status: string;
     totalSeats: number;
+    availableSeats: number;
 }

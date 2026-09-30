@@ -15,6 +15,7 @@ public class SessionReadService(IDbContext dbContext)
             pageSize = 10;
 
         return await dbContext.Set<Session>()
+            .Include(b => b.Bookings)
             .AsNoTracking()
             .OrderBy(s => s.Id)
             .Skip((page - 1) * pageSize)
@@ -32,7 +33,8 @@ public class SessionReadService(IDbContext dbContext)
                 s.Price,
                 s.SessionDate,
                 s.Status,
-                s.TotalSeats
+                s.TotalSeats,
+                s.GetAvailableSeats()
             ))
             .ToListAsync();
     }
@@ -40,6 +42,7 @@ public class SessionReadService(IDbContext dbContext)
     public async Task<Result<SessionResponse>> GetByIdAsync(int id)
     {
         var session = await dbContext.Set<Session>()
+            .Include(b => b.Bookings)
             .AsNoTracking()
             .Where(s => s.Id == id)
             .Select(s => new SessionResponse(
@@ -55,7 +58,8 @@ public class SessionReadService(IDbContext dbContext)
                 s.Price,
                 s.SessionDate,
                 s.Status,
-                s.TotalSeats
+                s.TotalSeats,
+                s.GetAvailableSeats()
             ))
             .FirstOrDefaultAsync();
 
@@ -63,13 +67,13 @@ public class SessionReadService(IDbContext dbContext)
         {
             return Result.Failure(ErrorType.NotFound, $"Session with id {id} not found.");
         }
-
         return session;
     }
 
     public async Task<Result<IReadOnlyList<SessionResponse>>> GetUpcomingAsync()
     {
         var session = await dbContext.Set<Session>()
+            .Include(b => b.Bookings)
             .AsNoTracking()
             .Where(s => s.SessionDate >= DateOnly.FromDateTime(DateTime.Now))
             .OrderBy(s => s.SessionDate)
@@ -86,7 +90,8 @@ public class SessionReadService(IDbContext dbContext)
                 s.Price,
                 s.SessionDate,
                 s.Status,
-                s.TotalSeats
+                s.TotalSeats,
+                s.GetAvailableSeats()
             ))
             .ToListAsync();
 

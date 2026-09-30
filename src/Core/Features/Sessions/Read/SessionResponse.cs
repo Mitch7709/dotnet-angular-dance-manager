@@ -15,6 +15,6 @@ public record SessionResponse(
     decimal Price,
     DateOnly SessionDate,
     SessionStatus Status,
-    int TotalSeats
-
+    int TotalSeats,
+    int AvailableSeats
 );

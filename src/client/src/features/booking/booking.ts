@@ -4,19 +4,8 @@ import themePlugin from '@fullcalendar/angular/themes/monarch';
 import timeGridPlugin from '@fullcalendar/angular/timegrid';
 import { SessionService } from '../../core/services/session-service';
 import { BookingService } from '../../core/services/booking-service';
-
-interface Session {
-  id: string;
-  classType: string;
-  instructor: string;
-  dateTime: string;
-  sessionDate: string; // YYYY-MM-DD
-  startTime: string; // HH:MM:SS
-  duration: number; // minutes
-  price: number;
-  availableSpots: number;
-  totalSeats: number;
-}
+import { SessionResponse } from '../../types/DTOs/SessionDTOs';
+import { BookingResponse } from '../../types/DTOs/BookingDTOs';
 
 @Component({
   selector: 'app-booking',
@@ -31,8 +20,9 @@ export class Booking implements OnInit {
   private readonly bookingService = inject(BookingService);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  protected selectedSession: Session | null = null;
-  protected sessions: Session[] = [];
+  protected selectedSession: SessionResponse | null = null;
+  protected sessions: SessionResponse[] = [];
+  protected studentSessions: BookingResponse[] = [];
 
   calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
@@ -53,6 +43,7 @@ export class Booking implements OnInit {
   };
 
   ngOnInit(): void {
+    this.loadStudentSessions();
     this.loadUpcomingSessions();
   }
 
@@ -71,56 +62,72 @@ export class Booking implements OnInit {
     });
   }
 
-  private transformApiSessionsToLocalFormat(apiSessions: any[]): Session[] {
+  private loadStudentSessions(): void {
+    this.bookingService.getForStudent().subscribe({
+      next: (response) => {
+        this.studentSessions = response;
+      }
+    })
+  }
+
+  protected bookSession(): void {
+    if (!this.selectedSession) return;
+
+    this.bookingService.bookForUser(Number(this.selectedSession.id)).subscribe({
+      next: () => {
+        alert(`Successfully booked: ${this.selectedSession!.classTypeName}`);
+        this.selectedSession!.availableSeats--;
+      },
+      error: (err) => {
+        console.error('Failed to book session:', err);
+        alert('Failed to book session. Please try again.');
+      },
+    });
+
+    alert(`Successfully booked: ${this.selectedSession!.classTypeName}`);
+
+    // Close the modal
+    this.closeSessionDialog();
+    this.selectedSession = null;
+  }
+
+  private transformApiSessionsToLocalFormat(apiSessions: any[]): SessionResponse[] {
     return apiSessions.map((apiSession) => ({
-      id: apiSession.id.toString(),
-      classType: apiSession.classTypeName,
-      instructor: apiSession.instructorName,
-      dateTime: `${apiSession.dayOfWeek} ${this.formatTime(apiSession.startTime)}`,
-      sessionDate: apiSession.sessionDate, // YYYY-MM-DD
-      startTime: apiSession.startTime, // HH:MM:SS
+      id: apiSession.id,
+      classTypeId: apiSession.classTypeId,
+      classTypeName: apiSession.classTypeName,
+      instructorId: apiSession.instructorId,
+      instructorName: apiSession.instructorName,
+      timeSlotId: apiSession.timeSlotId,
+      startTime: apiSession.startTime,
       duration: apiSession.duration,
+      dayOfWeek: apiSession.dayOfWeek,
       price: apiSession.price,
-      availableSpots: 0, // TODO: Add availability tracking to backend
-      totalSeats: apiSession.totalSeats, // TODO: Add capacity tracking to backend
+      sessionDate: apiSession.sessionDate,
+      status: apiSession.status,
+      totalSeats: apiSession.totalSeats,
+      availableSeats: apiSession.availableSeats,
     }));
   }
 
-  private formatTime(timeString: string): string {
-    // Convert from 24-hour format (HH:MM:SS or HH:MM) to 12-hour format (h:MM AM/PM)
-    if (!timeString) return '00:00 AM';
-
-    const timeParts = timeString.split(':');
-    let hours = parseInt(timeParts[0], 10);
-    const minutes = timeParts[1];
-
-    const period = hours >= 12 ? 'PM' : 'AM';
-    if (hours > 12) {
-      hours -= 12;
-    } else if (hours === 0) {
-      hours = 12;
-    }
-
-    return `${hours}:${minutes} ${period}`;
-  }
-  private mapSessionsToCalendarEvents(sessions: Session[]): void {
+  private mapSessionsToCalendarEvents(sessions: SessionResponse[]): void {
     const events = sessions.map((session) => {
       const startDateTime = this.buildDateTime(session.sessionDate, session.startTime);
       const endDateTime = this.calculateEndDateTime(startDateTime, session.duration);
 
       return {
-        id: session.id,
-        title: `${session.classType} - ${session.instructor}`,
+        id: session.id.toString(),
+        title: `${session.classTypeName} - ${session.instructorName}`,
         start: startDateTime,
         end: endDateTime,
-        backgroundColor: session.availableSpots > 0 ? '#3788d8' : '#d4d4d8',
-        borderColor: session.availableSpots > 0 ? '#0066cc' : '#a0a0a0',
+        color: session.availableSeats > 0 ? '#3788d8' : '#d4d4d8',
+        // borderColor: session.availableSeats > 0 ? '#0066cc' : '#a0a0a0',
         textColor: '#000000',
         extendedProps: {
-          classType: session.classType,
-          instructor: session.instructor,
+          classType: session.classTypeName,
+          instructor: session.instructorName,
           price: session.price,
-          availableSpots: session.availableSpots,
+          availableSpots: session.availableSeats,
           totalSeats: session.totalSeats,
           sessionId: session.id,
         },
@@ -130,6 +137,7 @@ export class Booking implements OnInit {
     if (this.calendarComponent) {
       const calendarApi = this.calendarComponent.getApi();
       events.forEach((event) => {
+        console.log('Adding event to calendar:', event);
         calendarApi.addEvent(event);
       });
     } else {
@@ -157,41 +165,20 @@ export class Booking implements OnInit {
     const sessionId = extendedProps.sessionId;
     const session = this.sessions.find((s) => s.id === sessionId);
 
-    if (session) {
+    if (session && extendedProps.availableSpots > 0) {
+      if (this.isSessionAlreadyBooked(sessionId)) {
+        alert('You have already booked this session.');
+        return;
+      }
+
       this.selectedSession = session;
       this.cdr.detectChanges();
-      console.log('Selected session:', this.selectedSession);
       this.openSessionDialog();
     }
   }
 
-  protected bookSession(): void {
-    if (!this.selectedSession) return;
-
-    // if (this.selectedSession.availableSpots === 0) {
-    //   alert('This session is fully booked!');
-    //   return;
-    // }
-
-    // TODO: Connect to backend to book the session
-    // console.log('Booking session:', this.selectedSession);
-
-    this.bookingService.bookForUser(Number(this.selectedSession.id)).subscribe({
-      next: () => {
-        alert(`Successfully booked: ${this.selectedSession!.classType}`);
-      },
-      error: (err) => {
-        console.error('Failed to book session:', err);
-        alert('Failed to book session. Please try again.');
-      },
-    });
-
-    alert(`Successfully booked: ${this.selectedSession!.classType}`);
-
-    // Close the modal
-    this.closeSessionDialog();
-
-    this.selectedSession = null;
+  private isSessionAlreadyBooked(sessionId: number): boolean {
+    return this.studentSessions.some(s => s.session.id === sessionId);
   }
 
   protected openSessionDialog(): void {
@@ -207,5 +194,4 @@ export class Booking implements OnInit {
       dialog.close();
     }
   }
-
 }

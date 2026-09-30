@@ -22,15 +22,15 @@
         <div class="space-y-4 mb-6">
           <div class="flex justify-between items-center pb-3 border-b border-gray-200">
             <span class="font-semibold text-gray-700">Class Type:</span>
-            <span class="text-gray-900">{{ selectedSession.classType }}</span>
+            <span class="text-gray-900">{{ selectedSession.classTypeName }}</span>
           </div>
           <div class="flex justify-between items-center pb-3 border-b border-gray-200">
             <span class="font-semibold text-gray-700">Instructor:</span>
-            <span class="text-gray-900">{{ selectedSession.instructor }}</span>
+            <span class="text-gray-900">{{ selectedSession.instructorName }}</span>
           </div>
           <div class="flex justify-between items-center pb-3 border-b border-gray-200">
             <span class="font-semibold text-gray-700">Date & Time:</span>
-            <span class="text-gray-900">{{ selectedSession.dateTime }}</span>
+            <span class="text-gray-900">{{ selectedSession.sessionDate }} {{ selectedSession.startTime }}</span>
           </div>
           <div class="flex justify-between items-center pb-3 border-b border-gray-200">
             <span class="font-semibold text-gray-700">Price:</span>
@@ -38,7 +38,7 @@
           </div>
           <div class="flex justify-between items-center">
             <span class="font-semibold text-gray-700">Available Spots:</span>
-            <span class="text-gray-900">{{ selectedSession.availableSpots }}/{{ selectedSession.totalSeats }}</span>
+            <span class="text-gray-900">{{ selectedSession.availableSeats }}/{{ selectedSession.totalSeats }}</span>
           </div>
         </div>
 
