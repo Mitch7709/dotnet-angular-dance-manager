@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService } from '../../core/services/user-service';
 import { ToastService } from '../../core/services/toast-service';
+import { User } from '../../types/DTOs/UserDTOs';
 
 @Component({
   selector: 'app-nav',
@@ -17,6 +18,7 @@ export class Nav implements OnInit {
 
   ngOnInit(): void {
     document.documentElement.setAttribute('data-theme', 'light');
+
   }
 
   handleSelectUserItem() {

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
   AppRole,
@@ -21,6 +21,9 @@ export class UserService {
   private readonly _currentUser = signal<User | null>(null);
 
   readonly currentUser = this._currentUser.asReadonly();
+  isInstructor = computed(
+    () => this.currentUser()?.roles?.includes('Instructor') || this.currentUser()?.roles?.includes('Admin')
+  )
 
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl + '/users';

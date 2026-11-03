@@ -363,5 +363,8 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Local API config with secrets (do not commit)
-src/API/appsettings.json
+.env
+.env.local
+.env.*.local
 src/API/appsettings.Development.json
+src/API/appsettings.Production.json

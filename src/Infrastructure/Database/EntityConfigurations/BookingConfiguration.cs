@@ -1,12 +1,13 @@
 using System;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Database.EntityConfigurations;
 
 public class BookingConfiguration : IEntityTypeConfiguration<Booking>
 {
-    public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Booking> builder)
+    public void Configure(EntityTypeBuilder<Booking> builder)
     {
         builder.ToTable("Bookings");
         builder.HasKey(b => b.Id);
